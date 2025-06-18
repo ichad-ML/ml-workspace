@@ -2,7 +2,10 @@
   "name": "@ml-workspace/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "otp": "nx serve otp --skip-nx-cache",
+    "crm-score": "nx serve crm-score --skip-nx-cache"
+  },
   "private": true,
   "devDependencies": {
     "@eslint/js": "^9.8.0",
@@ -42,6 +45,7 @@
   ],
   "dependencies": {
     "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "axios": "^1.6.0",

@@ -1,11 +1,9 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Get } from '@nestjs/common';
 
-@Controller("crm-score")
+@Controller('crm-score')
 export class CrmScoreController {
-    // This controller can be expanded with methods to handle specific routes
-    // For example, you can add a method to handle GET requests
-    // @Get('/')
-    // getData(): { message: string } {
-    //     return { message: "CRM Score Service is running!" };
-    // }
+  @Get('/')
+  getData(): { message: string } {
+    return { message: 'CRM Score Service is running!' };
+  }
 }
