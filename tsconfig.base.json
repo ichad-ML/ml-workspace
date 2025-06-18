@@ -15,6 +15,9 @@
     "noUnusedLocals": true,
     "skipLibCheck": true,
     "strict": true,
+    "strictPropertyInitialization": false, // This is required for class decorators
+    "experimentalDecorators": true, // This is required for class decorators
+    "emitDecoratorMetadata": true,
     "target": "es2022",
     "customConditions": ["development"]
   }
