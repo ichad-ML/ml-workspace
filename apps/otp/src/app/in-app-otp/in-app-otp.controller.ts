@@ -1,10 +1,12 @@
 import { Controller, Get } from "@nestjs/common";
+import { InAppOtpService } from './in-app-otp.service';
 
-@Controller("in-app-otp")
+@Controller('in-app-otp')
 export class InAppOtpController {
+  constructor(private readonly inAppOtpService: InAppOtpService) {}
 
-  @Get('/')
-  getData(): { message: string } {
-    return { message: "In-App OTP Service is running!" };
+  @Get('/') // test endpoint - to be deleted later
+  getData() {
+    return this.inAppOtpService.getData();
   }
 }
