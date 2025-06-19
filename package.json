@@ -24,6 +24,7 @@
     "@swc/helpers": "~0.5.11",
     "@swc/jest": "~0.2.36",
     "@types/jest": "^29.5.12",
+    "@types/joi": "^17.2.3",
     "@types/node": "~18.16.9",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
@@ -51,6 +52,7 @@
     "axios": "^1.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "joi": "^17.13.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   }
