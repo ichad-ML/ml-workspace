@@ -22,7 +22,13 @@
   ],
   "references": [
     {
+      "path": "../../libs/dtos/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/common/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/enums/tsconfig.lib.json"
     }
   ]
 }

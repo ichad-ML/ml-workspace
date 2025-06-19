@@ -1,4 +1,4 @@
 export enum OtpType {
-    SMS = 'sms',
-    IN_APP = 'in-app',
+  SMS = 'SMS',
+  IN_APP = 'IN_APP',
 }

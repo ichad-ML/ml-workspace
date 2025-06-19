@@ -3,6 +3,7 @@ import { SmsOtpModule } from './sms-otp/sms-otp.module';
 import { InAppOtpModule } from './in-app-otp/in-app-otp.module';
 import { ConfigModule } from '@nestjs/config';
 import commonConfig from '../config/common.config';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import commonConfig from '../config/common.config';
     }),
     SmsOtpModule,
     InAppOtpModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
