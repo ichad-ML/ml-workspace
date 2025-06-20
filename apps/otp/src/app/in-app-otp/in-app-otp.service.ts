@@ -14,6 +14,7 @@ export class InAppOtpService {
 
   getData() {
     console.log('Config:', this.config.port);
+    return { message: 'In-App OTP Service is running' };
     return this.otpApiService.sendOtp('1234567890', OtpType.SMS);
   }
 }
