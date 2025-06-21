@@ -22,7 +22,7 @@
   ],
   "references": [
     {
-      "path": "../../libs/common/tsconfig.lib.json"
+      "path": "../../libs/auth-lib/tsconfig.lib.json"
     }
   ]
 }

@@ -1,13 +1,13 @@
-import { Injectable , CanActivate, ExecutionContext, UnauthorizedException} from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { getCurrentFormattedDate } from '../helper-function/date';
-
-interface JwtPayload {
-  apiKey: string;
-  date: string;
-  [key: string]: any;
-}
+import { getCurrentFormattedDate } from '@ml-workspace/common';
+import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -16,8 +16,8 @@ export class JwtAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1];
-    console.log("Token:", token);
-    console.log("Request Headers:", request.headers);
+    console.log('Token:', token);
+    console.log('Request Headers:', request.headers);
 
     if (!token) {
       throw new UnauthorizedException('Token missing');
@@ -31,19 +31,19 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-        const decoded = jwt.verify(token, secretKey) as JwtPayload;
+      const decoded = jwt.verify(token, secretKey) as JwtPayload;
 
-        if(!decoded.apiKey || !decoded.date) {
-           return false; 
-        }
-        
-        if (decoded.apiKey !== apiKey) {
-            return false;
-        }
+      if (!decoded.apiKey || !decoded.date) {
+        return false;
+      }
 
-        if (decoded.date !== getCurrentFormattedDate()) {
-          return false;
-        }
+      if (decoded.apiKey !== apiKey) {
+        return false;
+      }
+
+      if (decoded.date !== getCurrentFormattedDate()) {
+        return false;
+      }
 
       request.user = decoded;
       return true;

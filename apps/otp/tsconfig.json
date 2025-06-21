@@ -4,13 +4,13 @@
   "include": [],
   "references": [
     {
-      "path": "../../libs/dtos"
+      "path": "../../libs/auth-lib"
     },
     {
       "path": "../../libs/common"
     },
     {
-      "path": "../../libs/enums"
+      "path": "../../libs/config"
     },
     {
       "path": "./tsconfig.app.json"

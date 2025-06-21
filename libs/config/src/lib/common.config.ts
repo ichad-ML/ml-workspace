@@ -1,6 +1,6 @@
-import { validateConfigSchema } from "@ml-workspace/common";
 import { ConfigModule, registerAs } from "@nestjs/config";
 import Joi from "joi";
+import { validateConfigSchema } from "./utils/schema.validator.util";
 
 const schema = Joi.object({
   port: Joi.number(),
@@ -17,4 +17,3 @@ export default registerAs('common', async () => {
 
   return config;
 });
-

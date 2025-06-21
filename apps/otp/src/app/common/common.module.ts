@@ -1,8 +1,8 @@
 import { Module, ValidationError, ValidationPipe } from '@nestjs/common';
 import { OtpApiService } from './otp-api/otp-api.service';
 import { ConfigModule } from '@nestjs/config';
-import commonConfig from '../../config/common.config';
 import { APP_PIPE } from '@nestjs/core';
+import { commonConfig } from '@ml-workspace/config';
 
 @Module({
   imports: [

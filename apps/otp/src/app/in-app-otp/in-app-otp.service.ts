@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import commonConfig from '../../config/common.config';
 import type { ConfigType } from '@nestjs/config';
 import { OtpApiService } from '../common/otp-api/otp-api.service';
-import { OtpType } from '@ml-workspace/enums';
+import { OtpType } from '@ml-workspace/common';
+import { commonConfig } from '@ml-workspace/config';
 
 @Injectable()
 export class InAppOtpService {

@@ -1,6 +1,6 @@
+import { commonConfig } from '@ml-workspace/config';
 import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
-import commonConfig from '../../config/common.config';
 
 @Injectable()
 export class SmsOtpService {
