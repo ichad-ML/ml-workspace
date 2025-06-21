@@ -10,7 +10,7 @@ const swcJestConfig = JSON.parse(
 swcJestConfig.swcrc = false;
 
 export default {
-  displayName: '@ml-workspace/dtos',
+  displayName: '@ml-workspace/config',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

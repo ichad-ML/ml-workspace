@@ -1,5 +1,5 @@
-import Joi from "joi";
-import { inspect } from "util";
+import Joi from 'joi';
+import { inspect } from 'util';
 
 export const validateConfigSchema = (
   context: string,
@@ -11,7 +11,6 @@ export const validateConfigSchema = (
   });
 
   if (error) {
-     
     console.error(
       `${context}: Config Validation Error`,
       inspect(error.details.map((entry) => entry.message))

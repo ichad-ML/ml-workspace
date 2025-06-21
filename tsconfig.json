@@ -7,16 +7,16 @@
       "path": "./apps/otp"
     },
     {
-      "path": "./libs/dtos"
-    },
-    {
       "path": "./apps/crm-score"
     },
     {
       "path": "./libs/common"
     },
     {
-      "path": "./libs/enums"
+      "path": "./libs/auth-lib"
+    },
+    {
+      "path": "./libs/config"
     }
   ]
 }

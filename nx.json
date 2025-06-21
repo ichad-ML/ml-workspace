@@ -28,7 +28,11 @@
           "watchDepsName": "watch-deps"
         }
       },
-      "exclude": ["libs/dtos/*", "libs/common/*", "libs/enums/*"]
+      "exclude": [
+        "libs/auth-lib/*",
+        "libs/common/*",
+        "libs/config/*"
+      ]
     },
     {
       "plugin": "@nx/webpack/plugin",
@@ -55,7 +59,11 @@
     },
     {
       "plugin": "@nx/js/typescript",
-      "include": ["libs/dtos/*", "libs/common/*", "libs/enums/*"],
+      "include": [
+        "libs/auth-lib/*",
+        "libs/common/*",
+        "libs/config/*"
+      ],
       "options": {
         "typecheck": {
           "targetName": "typecheck"

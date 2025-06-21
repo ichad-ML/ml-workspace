@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { SmsOtpService } from './sms-otp.service';
-import { TestDto2 } from '@ml-workspace/dtos';
-import { JwtAuthGuard } from '@ml-workspace/common';
+import { JwtAuthGuard } from '@ml-workspace/auth-lib';
+import { TestDto } from '@ml-workspace/common';
 
 @UseGuards(JwtAuthGuard)
 @Controller('sms-otp')
@@ -14,7 +14,7 @@ export class SmsOtpController {
   }
 
   @Post('/')
-  createData(@Body() data: TestDto2) {
+  createData(@Body() data: TestDto) {
     return { message: `Received data: ${JSON.stringify(data)}` };
   }
 }

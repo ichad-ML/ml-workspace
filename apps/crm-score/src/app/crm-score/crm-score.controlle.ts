@@ -1,4 +1,4 @@
-import { JwtAuthGuard } from '@ml-workspace/common';
+import { JwtAuthGuard } from '@ml-workspace/auth-lib';
 import { Controller, Get, UseGuards } from '@nestjs/common';
 
 @UseGuards(JwtAuthGuard)

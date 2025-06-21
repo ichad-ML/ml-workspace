@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { InAppOtpService } from './in-app-otp.service';
-import { JwtAuthGuard } from '@ml-workspace/common';
+import { JwtAuthGuard } from '@ml-workspace/auth-lib';
 
 @UseGuards(JwtAuthGuard) 
 @Controller('in-app-otp')

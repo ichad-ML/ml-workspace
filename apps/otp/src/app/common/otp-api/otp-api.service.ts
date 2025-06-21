@@ -1,8 +1,8 @@
 import { Inject, Injectable, OnModuleInit } from "@nestjs/common";
-import axios, { AxiosInstance } from "axios";
-import commonConfig from "../../../config/common.config";
+import axios, { AxiosInstance } from 'axios';
 import type { ConfigType } from "@nestjs/config";
-import { OtpType } from "@ml-workspace/enums";
+import { OtpType } from '@ml-workspace/common';
+import { commonConfig } from '@ml-workspace/config';
 
 @Injectable()
 export class OtpApiService implements OnModuleInit {
