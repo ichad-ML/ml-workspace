@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { JwtAuthGuard } from '@ml-workspace/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 
+@UseGuards(JwtAuthGuard)
 @Controller('crm-score')
 export class CrmScoreController {
   @Get('/')

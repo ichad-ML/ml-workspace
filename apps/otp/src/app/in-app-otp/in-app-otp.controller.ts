@@ -1,6 +1,8 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { InAppOtpService } from './in-app-otp.service';
+import { JwtAuthGuard } from '@ml-workspace/common';
 
+@UseGuards(JwtAuthGuard) 
 @Controller('in-app-otp')
 export class InAppOtpController {
   constructor(private readonly inAppOtpService: InAppOtpService) {}
