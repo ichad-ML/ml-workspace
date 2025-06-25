@@ -5,7 +5,7 @@ import { OtpType } from '@ml-workspace/common';
 import { commonConfig } from '@ml-workspace/config';
 
 @Injectable()
-export class OtpApiService implements OnModuleInit {
+export class OtpApiService2 implements OnModuleInit {
   private smsHttpClient: AxiosInstance;
   private inappHttpClient: AxiosInstance;
 
@@ -16,14 +16,14 @@ export class OtpApiService implements OnModuleInit {
 
   onModuleInit() {
     this.smsHttpClient = axios.create({
-      baseURL: "", // SMS OTP API base URL
+      baseURL: '', // SMS OTP API base URL
       headers: {
         Authorization: `Bearer`, // token
       },
     });
 
     this.inappHttpClient = axios.create({
-      baseURL: "", // In-App OTP API base URL
+      baseURL: '', // In-App OTP API base URL
       headers: {
         Authorization: `Bearer `, // token
       },

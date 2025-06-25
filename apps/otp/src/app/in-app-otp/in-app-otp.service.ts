@@ -1,20 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
-import type { ConfigType } from '@nestjs/config';
-import { OtpApiService } from '../common/otp-api/otp-api.service';
+import { Injectable } from '@nestjs/common';
 import { OtpType } from '@ml-workspace/common';
-import { commonConfig } from '@ml-workspace/config';
+import { OtpApiService } from '@ml-workspace/api-lib';
 
 @Injectable()
 export class InAppOtpService {
-  constructor(
-    @Inject(commonConfig.KEY)
-    private readonly config: ConfigType<typeof commonConfig>,
-    private readonly otpApiService: OtpApiService
-  ) {}
+  constructor(private readonly otpApiService: OtpApiService) {}
 
   getData() {
-    console.log('Config:', this.config.port);
-    return { message: 'In-App OTP Service is running' };
-    return this.otpApiService.sendOtp('1234567890', OtpType.SMS);
+    return { message: 'In-App OTP Service is running', type: OtpType.IN_APP };
+    // return this.otpApiService.sendOtp('1234567890', OtpType.SMS);
   }
 }

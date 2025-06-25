@@ -1,5 +1,5 @@
 import { Module, ValidationError, ValidationPipe } from '@nestjs/common';
-import { OtpApiService } from './otp-api/otp-api.service';
+import { OtpApiService2 } from './otp-api/otp-api.service';
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { commonConfig } from '@ml-workspace/config';
@@ -33,8 +33,8 @@ import { commonConfig } from '@ml-workspace/config';
           },
         }),
     },
-    OtpApiService,
+    OtpApiService2,
   ],
-  exports: [OtpApiService],
+  exports: [OtpApiService2],
 })
 export class CommonModule {}
