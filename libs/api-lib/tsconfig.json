@@ -7,9 +7,6 @@
       "path": "../auth-lib"
     },
     {
-      "path": "../config"
-    },
-    {
       "path": "./tsconfig.lib.json"
     },
     {

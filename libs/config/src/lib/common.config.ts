@@ -4,6 +4,8 @@ import { validateConfigSchema } from "./utils/schema.validator.util";
 
 const schema = Joi.object({
   port: Joi.number(),
+  smsOtpBaseUrl: Joi.string(),
+  inAppOtpBaseUrl: Joi.string(),
 });
 
 export default registerAs('common', async () => {

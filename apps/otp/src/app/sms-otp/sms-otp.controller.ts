@@ -3,7 +3,7 @@ import { SmsOtpService } from './sms-otp.service';
 import { JwtAuthGuard } from '@ml-workspace/auth-lib';
 import { TestDto } from '@ml-workspace/common';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('sms-otp')
 export class SmsOtpController {
   constructor(private readonly smsOtpService: SmsOtpService) {}

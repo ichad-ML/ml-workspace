@@ -5,12 +5,11 @@ import { MlClientApi } from '@ml-workspace/auth-lib';
 export class OtpApiService {
   constructor(private readonly mlClientApi: MlClientApi) {}
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async getOtp(baseUrl: string): Promise<any> {
+  async getOtp(data: any): Promise<any> {
     const res = await this.mlClientApi.sendRequest({
-      params: {},
-      method: 'GET',
-      url: `/posts`,
-      baseURL: baseUrl,
+      method: data.method,
+      url: data.url,
+      baseURL: data.baseUrl,
     });
     return res.data;
   }

@@ -13,7 +13,10 @@ export class InAppOtpService {
     private readonly otpApiService: OtpApiService) { }
 
   getData() {
-    // return { message: 'In-App OTP Service is running', type: OtpType.IN_APP };
-    return this.otpApiService.getOtp(this.config.inAppOtpBaseUrl);
+    return this.otpApiService.getOtp({
+      baseUrl: this.config.inAppOtpBaseUrl,
+      url: '/users',
+      method: 'GET',
+    });
   }
 }
