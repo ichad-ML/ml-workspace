@@ -11,6 +11,8 @@ export default registerAs('common', async () => {
 
   const config = {
     port: process.env.PORT,
+    smsOtpBaseUrl: process.env.SMS_OTP_BASE_URL || '',
+    inAppOtpBaseUrl: process.env.IN_APP_OTP_BASE_URL || '',
   };
 
   validateConfigSchema('common', config, schema);
