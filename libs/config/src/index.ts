@@ -1,2 +1,3 @@
 export * from './lib/utils/schema.validator.util';
-export { default as commonConfig } from './lib/common.config';
+export { default as otpConfig } from './lib/otp.config';
+export { default as crmConfig } from './lib/crm.config';

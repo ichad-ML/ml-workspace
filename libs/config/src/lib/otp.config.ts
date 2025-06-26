@@ -8,7 +8,7 @@ const schema = Joi.object({
   inAppOtpBaseUrl: Joi.string(),
 });
 
-export default registerAs('common', async () => {
+export default registerAs('otpConfig', async () => {
   await ConfigModule.envVariablesLoaded;
 
   const config = {
@@ -17,7 +17,7 @@ export default registerAs('common', async () => {
     inAppOtpBaseUrl: process.env.IN_APP_OTP_BASE_URL || '',
   };
 
-  validateConfigSchema('common', config, schema);
+  validateConfigSchema('otpConfig', config, schema);
 
   return config;
 });

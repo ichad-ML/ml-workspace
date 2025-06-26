@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../libs/config"
+    },
+    {
       "path": "../../libs/auth-lib"
     },
     {
