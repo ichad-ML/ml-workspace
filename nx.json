@@ -31,7 +31,8 @@
       "exclude": [
         "libs/auth-lib/*",
         "libs/common/*",
-        "libs/config/*"
+        "libs/config/*",
+        "libs/api-lib/*"
       ]
     },
     {
@@ -62,7 +63,8 @@
       "include": [
         "libs/auth-lib/*",
         "libs/common/*",
-        "libs/config/*"
+        "libs/config/*",
+        "libs/api-lib/*"
       ],
       "options": {
         "typecheck": {

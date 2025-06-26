@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../libs/api-lib"
+    },
+    {
       "path": "../../libs/auth-lib"
     },
     {

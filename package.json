@@ -25,6 +25,7 @@
     "@swc/jest": "~0.2.36",
     "@types/jest": "^29.5.12",
     "@types/joi": "^17.2.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "~18.16.9",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",

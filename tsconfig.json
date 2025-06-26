@@ -17,6 +17,9 @@
     },
     {
       "path": "./libs/config"
+    },
+    {
+      "path": "./libs/api-lib"
     }
   ]
 }

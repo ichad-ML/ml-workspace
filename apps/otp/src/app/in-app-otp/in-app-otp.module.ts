@@ -1,12 +1,13 @@
-import { Module } from "@nestjs/common";
-import { InAppOtpController } from "./in-app-otp.controller";
-import { InAppOtpService } from "./in-app-otp.service";
-import { OtpApiService } from '../common/otp-api/otp-api.service';
+import { Module } from '@nestjs/common';
+import { InAppOtpController } from './in-app-otp.controller';
+import { InAppOtpService } from './in-app-otp.service';
+import { OtpApiService } from '@ml-workspace/api-lib';
+import { MlClientApi } from '@ml-workspace/auth-lib';
 
 @Module({
   imports: [],
   controllers: [InAppOtpController],
-  providers: [InAppOtpService, OtpApiService],
+  providers: [InAppOtpService, OtpApiService, MlClientApi],
   exports: [],
 })
 export class InAppOtpModule {}
