@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "otp": "nx serve otp --skip-nx-cache",
-    "crm-score": "nx serve crm-score --skip-nx-cache"
+    "otp": "ts-node-dev --respawn --transpile-only apps/otp/src/main.ts",
+    "crm-score": "ts-node-dev --respawn --transpile-only apps/crm-score/src/main.ts"
   },
   "private": true,
   "devDependencies": {
@@ -35,6 +35,7 @@
     "prettier": "^2.6.2",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
+    "ts-node-dev": "^2.0.0",
     "tslib": "^2.3.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.29.0",
