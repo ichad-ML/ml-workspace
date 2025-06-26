@@ -1,13 +1,13 @@
 import { Module, ValidationError, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
-import { commonConfig } from '@ml-workspace/config';
+import { otpConfig } from '@ml-workspace/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [commonConfig],
+      load: [otpConfig],
     }),
   ],
   controllers: [],

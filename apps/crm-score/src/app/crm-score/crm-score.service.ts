@@ -1,7 +1,11 @@
 import { Injectable } from "@nestjs/common";
+import { CrmApiService } from '../api/crm-api.service';
 
 @Injectable()
 export class CrmScoreService {
-  // This service currently does not have any methods defined.
-  // You can add methods here to handle CRM score related logic.
+  constructor(private readonly crmApiService: CrmApiService) {}
+
+  async getData() {
+    return this.crmApiService.getData();
+  }
 }
