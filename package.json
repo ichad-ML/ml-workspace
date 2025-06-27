@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "otp": "ts-node-dev --respawn --transpile-only apps/otp/src/main.ts",
-    "crm-score": "ts-node-dev --respawn --transpile-only apps/crm-score/src/main.ts"
+    "otp": "nx serve otp --skip-nx-cache",
+    "crm-score": "nx serve crm-score --skip-nx-cache"
   },
   "private": true,
   "devDependencies": {
