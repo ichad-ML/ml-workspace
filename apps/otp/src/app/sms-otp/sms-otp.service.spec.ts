@@ -1,12 +1,12 @@
-import { OtpApiService } from '@ml-workspace/api-lib';
 import { mockOtpApiService, mockOtpConfig } from '../common/utils/mocks';
-import { InAppOtpService } from './in-app-otp.service';
+import { SmsOtpService } from './sms-otp.service';
+import { OtpApiService } from '@ml-workspace/api-lib';
 
-describe('InAppOtpService', () => {
-  let inAppOtpService: InAppOtpService;
+describe('SmsOtpService', () => {
+  let smsOtpService: SmsOtpService;
 
   beforeAll(() => {
-    inAppOtpService = new InAppOtpService(
+    smsOtpService = new SmsOtpService(
       mockOtpConfig,
       mockOtpApiService as OtpApiService
     );
@@ -17,7 +17,7 @@ describe('InAppOtpService', () => {
   });
 
   it('should be defined', () => {
-    expect(inAppOtpService).toBeTruthy();
+    expect(smsOtpService).toBeTruthy();
   });
 });
 
