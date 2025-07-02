@@ -6,11 +6,22 @@ export class OtpApiService {
   constructor(private readonly mlClientApi: MlClientApi) {}
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getOtp(data: any): Promise<any> {
-    const res = await this.mlClientApi.sendRequest({
+    const response = await this.mlClientApi.sendRequest({
+      data: data.data,
       method: data.method,
       url: data.url,
       baseURL: data.baseUrl,
     });
-    return res.data;
+    return response.data;
+  }
+
+  async validateOtp(data: any): Promise<any> {
+    const response = await this.mlClientApi.sendRequest({
+      data: data.data,
+      method: data.method,
+      url: data.url,
+      baseURL: data.baseUrl,
+    });
+    return response.data;
   }
 }
