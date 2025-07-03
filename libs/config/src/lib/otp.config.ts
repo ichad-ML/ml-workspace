@@ -7,6 +7,7 @@ const schema = Joi.object({
   smsOtpBaseUrl: Joi.string(),
   inAppOtpBaseUrlGetDetails: Joi.string(),
   inAppOtpBaseUrlValidate: Joi.string(),
+  otpSalt: Joi.string(),
 });
 
 export default registerAs('otpConfig', async () => {
@@ -18,6 +19,7 @@ export default registerAs('otpConfig', async () => {
     inAppOtpBaseUrlGetDetails:
       process.env.IN_APP_OTP_BASE_URL_GET_DETAILS || '',
     inAppOtpBaseUrlValidate: process.env.IN_APP_OTP_BASE_URL_VALIDATE || '',
+    otpSalt: process.env.OTP_SALT || '',
   };
 
   validateConfigSchema('otpConfig', config, schema);

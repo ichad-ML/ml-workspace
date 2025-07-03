@@ -1,12 +1,7 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
 import { PickType } from '@nestjs/swagger';
-import { OTPService } from '../enums/otp.enum';
+import { TransactionType } from '../enums/otp.enum';
+import { Expose } from 'class-transformer';
 
 export class InAppOtpDtoGetDetails {
   @IsString()
@@ -22,37 +17,33 @@ export class InAppOtpDtoGetDetails {
   @Length(11, 11, {
     message: 'mobileNumber must be 11 digits',
   })
+  @Expose({ name: 'mobileno' })
   mobileNumber: string;
 
   @IsString()
   @IsNotEmpty()
+  @Expose({ name: 'deviceID' })
   deviceId: string;
 
-  @IsString()
   @IsNotEmpty()
-  date: string;
+  @IsEnum(TransactionType)
+  serviceType: TransactionType;
 
   @IsNotEmpty()
-  @IsEnum(OTPService)
-  serviceType: OTPService;
-
   @IsString()
-  @IsNotEmpty()
-  signature: string;
+  @Expose({ name: 'timelimit' })
+  timeLimit: string;
 }
 
 export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
   'mobileNumber',
   'deviceId',
   'serviceType',
+  'timeLimit',
 ]) {
   @IsString()
   @IsNotEmpty()
   pin: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  timeLimit: number;
 
   @IsString()
   @IsNotEmpty()

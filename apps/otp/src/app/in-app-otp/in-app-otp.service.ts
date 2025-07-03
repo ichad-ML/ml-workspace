@@ -16,11 +16,11 @@ export class InAppOtpService {
     private readonly otpApiService: OtpApiService
   ) {}
 
-  getInAppOtp(data: InAppOtpDtoGetDetails) {
-    return this.otpApiService.getOtp(data, OTPService.IN_APP);
+  getInAppOtp(dto: InAppOtpDtoGetDetails) {
+    return this.otpApiService.getOtp(dto, OTPService.IN_APP);
   }
 
-  validateInAppOtp(data: InAppOtpDtoValidate) {
-    return this.otpApiService.validateOtp(data, OTPService.IN_APP);
+  validateInAppOtp(dto: InAppOtpDtoValidate) {
+    return this.otpApiService.validateOtp(dto, OTPService.IN_APP);
   }
 }

@@ -3,6 +3,8 @@ import { MlClientApi } from '@ml-workspace/auth-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
+  createSignature,
+  getCurrentDateTime,
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
   OTPOperation,
@@ -18,12 +20,23 @@ export class OtpApiService {
     private readonly mlClientApi: MlClientApi
   ) {}
 
-  async getOtp(data: InAppOtpDtoGetDetails, service: OTPService): Promise<any> {
+  async getOtp(dto: InAppOtpDtoGetDetails, service: OTPService): Promise<any> {
     const { baseUrl, url } = this.getUrls(service, OTPOperation.GET_DETAILS);
 
+    const currentDate = getCurrentDateTime();
+
+    const payload = {
+      ...dto,
+      date: currentDate,
+      Mobileno: dto.mobileNumber,
+      signature: createSignature(dto, currentDate, this.config.otpSalt),
+    };
+
+    console.log('payload===>', payload);
+
     const response = await this.mlClientApi.sendRequest({
-      data,
       url,
+      data: payload,
       baseURL: baseUrl,
       method: 'POST',
     });
