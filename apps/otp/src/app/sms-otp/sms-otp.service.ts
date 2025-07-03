@@ -1,4 +1,5 @@
 import { OtpApiService } from '@ml-workspace/api-lib';
+import { OtpService } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
 import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
@@ -11,11 +12,11 @@ export class SmsOtpService {
     private readonly otpApiService: OtpApiService
   ) {}
 
-  getData() {
-    return this.otpApiService.getOtp({
-      method: 'GET',
-      url: '/posts',
-      baseUrl: this.config.smsOtpBaseUrl,
-    });
+  getSmsOtp(data: any) {
+    return this.otpApiService.getOtp(data, OtpService.SMS);
+  }
+
+  validateSmsOtp(data: any) {
+    return this.otpApiService.validateOtp(data, OtpService.SMS);
   }
 }

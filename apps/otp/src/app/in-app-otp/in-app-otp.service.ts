@@ -5,8 +5,8 @@ import { otpConfig } from '@ml-workspace/config';
 import {
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
+  OtpService,
 } from '@ml-workspace/common';
-import { OTP } from '../common/utils/route';
 
 @Injectable()
 export class InAppOtpService {
@@ -17,20 +17,10 @@ export class InAppOtpService {
   ) {}
 
   getInAppOtp(data: InAppOtpDtoGetDetails) {
-    return this.otpApiService.getOtp({
-      data,
-      method: 'POST',
-      url: OTP.IN_APP_GET_DETAILS,
-      baseUrl: this.config.inAppOtpBaseUrlGetDetails,
-    });
+    return this.otpApiService.getOtp(data, OtpService.IN_APP);
   }
 
   validateInAppOtp(data: InAppOtpDtoValidate) {
-    return this.otpApiService.validateOtp({
-      data,
-      method: 'POST',
-      url: OTP.IN_APP_VALIDATE,
-      baseUrl: this.config.inAppOtpBaseUrlValidate,
-    });
+    return this.otpApiService.validateOtp(data, OtpService.IN_APP);
   }
 }
