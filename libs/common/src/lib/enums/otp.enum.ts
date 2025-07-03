@@ -1,4 +1,4 @@
-export enum OtpServiceType {
+export enum TransactionType {
   LOGIN = 'LOGIN',
   CASH_IN = 'CASH_IN',
   CASH_OUT = 'CASH_OUT',
@@ -8,12 +8,12 @@ export enum OtpServiceType {
   ELOAD = 'ELOAD',
 }
 
-export enum OtpService {
+export enum OTPService {
   IN_APP = 'IN_APP',
   SMS = 'SMS',
 }
 
-export enum OtpType {
+export enum OTPOperation {
   GET_DETAILS = 'GET_DETAILS',
   VALIDATE_OTP = 'VALIDATE_OTP',
 }

@@ -1,5 +1,5 @@
 import { OtpApiService } from '@ml-workspace/api-lib';
-import { OtpService } from '@ml-workspace/common';
+import { OTPService } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
 import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
@@ -13,10 +13,10 @@ export class SmsOtpService {
   ) {}
 
   getSmsOtp(data: any) {
-    return this.otpApiService.getOtp(data, OtpService.SMS);
+    return this.otpApiService.getOtp(data, OTPService.SMS);
   }
 
   validateSmsOtp(data: any) {
-    return this.otpApiService.validateOtp(data, OtpService.SMS);
+    return this.otpApiService.validateOtp(data, OTPService.SMS);
   }
 }

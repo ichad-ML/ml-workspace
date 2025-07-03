@@ -5,8 +5,8 @@ import { otpConfig } from '@ml-workspace/config';
 import {
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
-  OtpService,
-  OtpType,
+  OTPOperation,
+  OTPService,
 } from '@ml-workspace/common';
 import { OTP } from '../../route';
 
@@ -18,8 +18,8 @@ export class OtpApiService {
     private readonly mlClientApi: MlClientApi
   ) {}
 
-  async getOtp(data: InAppOtpDtoGetDetails, service: OtpService): Promise<any> {
-    const { baseUrl, url } = this.getUrls(service, OtpType.GET_DETAILS);
+  async getOtp(data: InAppOtpDtoGetDetails, service: OTPService): Promise<any> {
+    const { baseUrl, url } = this.getUrls(service, OTPOperation.GET_DETAILS);
 
     const response = await this.mlClientApi.sendRequest({
       data,
@@ -32,9 +32,9 @@ export class OtpApiService {
 
   async validateOtp(
     data: InAppOtpDtoValidate,
-    service: OtpService
+    service: OTPService
   ): Promise<any> {
-    const { baseUrl, url } = this.getUrls(service, OtpType.VALIDATE_OTP);
+    const { baseUrl, url } = this.getUrls(service, OTPOperation.VALIDATE_OTP);
 
     const response = await this.mlClientApi.sendRequest({
       data,
@@ -45,11 +45,11 @@ export class OtpApiService {
     return response.data;
   }
 
-  private getUrls(service: OtpService, type?: OtpType) {
-    const isSms = service === OtpService.SMS;
+  private getUrls(service: OTPService, action?: OTPOperation) {
+    const isSms = service === OTPService.SMS;
 
-    switch (type) {
-      case OtpType.VALIDATE_OTP:
+    switch (action) {
+      case OTPOperation.VALIDATE_OTP:
         return {
           baseUrl: isSms
             ? this.config.smsOtpBaseUrl

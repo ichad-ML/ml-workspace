@@ -5,8 +5,8 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { OtpServiceType } from '../enums/otp.enum';
 import { PickType } from '@nestjs/swagger';
+import { OTPService } from '../enums/otp.enum';
 
 export class InAppOtpDtoGetDetails {
   @IsString()
@@ -33,8 +33,8 @@ export class InAppOtpDtoGetDetails {
   date: string;
 
   @IsNotEmpty()
-  @IsEnum(OtpServiceType)
-  serviceType: OtpServiceType;
+  @IsEnum(OTPService)
+  serviceType: OTPService;
 
   @IsString()
   @IsNotEmpty()
