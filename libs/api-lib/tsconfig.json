@@ -4,6 +4,12 @@
   "include": [],
   "references": [
     {
+      "path": "../common"
+    },
+    {
+      "path": "../config"
+    },
+    {
       "path": "../auth-lib"
     },
     {

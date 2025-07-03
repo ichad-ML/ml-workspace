@@ -5,7 +5,9 @@ import { validateConfigSchema } from "./utils/schema.validator.util";
 const schema = Joi.object({
   port: Joi.number(),
   smsOtpBaseUrl: Joi.string(),
-  inAppOtpBaseUrl: Joi.string(),
+  inAppOtpBaseUrlGetDetails: Joi.string(),
+  inAppOtpBaseUrlValidate: Joi.string(),
+  otpSalt: Joi.string(),
 });
 
 export default registerAs('otpConfig', async () => {
@@ -14,7 +16,10 @@ export default registerAs('otpConfig', async () => {
   const config = {
     port: process.env.PORT,
     smsOtpBaseUrl: process.env.SMS_OTP_BASE_URL || '',
-    inAppOtpBaseUrl: process.env.IN_APP_OTP_BASE_URL || '',
+    inAppOtpBaseUrlGetDetails:
+      process.env.IN_APP_OTP_BASE_URL_GET_DETAILS || '',
+    inAppOtpBaseUrlValidate: process.env.IN_APP_OTP_BASE_URL_VALIDATE || '',
+    otpSalt: process.env.OTP_SALT || '',
   };
 
   validateConfigSchema('otpConfig', config, schema);
