@@ -5,13 +5,17 @@ export type Functions<T> = Partial<{
   [K in keyof T]: T[K];
 }>;
 
-export function createSignature(
-  dto: InAppOtpDtoGetDetails,
-  date: string,
-  salt: string
-): string {
-  const { username, password, mobileNumber, deviceId, serviceType, timeLimit } =
-    dto;
+export function createSignature(dto: InAppOtpDtoGetDetails, salt: string): string {
+  const {
+    username,
+    password,
+    mobileNumber,
+    deviceId,
+    date,
+    serviceType,
+    timeLimit,
+  } = dto;
+
   const DELIMITER = '|';
   const dataToHash = [
     username?.trim(),
@@ -23,6 +27,7 @@ export function createSignature(
     timeLimit?.trim(),
     salt?.trim(),
   ].join(DELIMITER);
+
   return hashSha512(dataToHash);
 }
 

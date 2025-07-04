@@ -4,7 +4,6 @@ import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
   createSignature,
-  getCurrentDateTime,
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
   OTPOperation,
@@ -23,16 +22,16 @@ export class OtpApiService {
   async getOtp(dto: InAppOtpDtoGetDetails, service: OTPService): Promise<any> {
     const { baseUrl, url } = this.getUrls(service, OTPOperation.GET_DETAILS);
 
-    const currentDate = getCurrentDateTime();
+    const signature = createSignature(dto, this.config.otpSalt);
+
+    if (signature !== dto.signature) {
+      throw new Error('Invalid signature...');
+    }
 
     const payload = {
       ...dto,
-      date: currentDate,
       Mobileno: dto.mobileNumber,
-      signature: createSignature(dto, currentDate, this.config.otpSalt),
     };
-
-    console.log('payload===>', payload);
 
     const response = await this.mlClientApi.sendRequest({
       url,
@@ -49,9 +48,17 @@ export class OtpApiService {
   ): Promise<any> {
     const { baseUrl, url } = this.getUrls(service, OTPOperation.VALIDATE_OTP);
 
+    console.log('urls==>', { baseUrl, url });
+
+    const payload = {
+      ...data,
+      mobile_no: data.mobileNumber,
+      service_type: data.serviceType,
+    };
+
     const response = await this.mlClientApi.sendRequest({
-      data,
       url,
+      data: payload,
       baseURL: baseUrl,
       method: 'POST',
     });
