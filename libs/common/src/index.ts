@@ -9,6 +9,7 @@ export * from './lib/dtos/otp.dto';
 // Enums
 export * from './lib/enums/crm-score.enum';
 export * from './lib/enums/otp.enum';
+export * from './lib/enums/date.enum';
 
 // Interfaces
 export * from './lib/interfaces/crm-score.interface';
