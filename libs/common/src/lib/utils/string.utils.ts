@@ -1,11 +1,10 @@
 import { createHash } from 'crypto';
 import { InAppOtpDtoGetDetails } from '../dtos/otp.dto';
 
-export type Functions<T> = Partial<{
-  [K in keyof T]: T[K];
-}>;
-
-export function createSignature(dto: InAppOtpDtoGetDetails, salt: string): string {
+export function createInAppSignature(
+  dto: InAppOtpDtoGetDetails,
+  salt: string
+): string {
   const {
     username,
     password,
@@ -28,9 +27,11 @@ export function createSignature(dto: InAppOtpDtoGetDetails, salt: string): strin
     salt?.trim(),
   ].join(DELIMITER);
 
-  return hashSha512(dataToHash);
+  const res = createHashSignature(dataToHash);
+  console.log('res==>', res);
+  return res;
 }
 
-function hashSha512(data: string): string {
+export function createHashSignature(data: string): string {
   return createHash('sha512').update(data).digest('hex');
 }

@@ -3,6 +3,9 @@ import { OtpApiService } from '@ml-workspace/api-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
+  createHashSignature,
+  DateFormat,
+  getCurrentDate,
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
   OTPService,
@@ -16,11 +19,32 @@ export class InAppOtpService {
     private readonly otpApiService: OtpApiService
   ) {}
 
-  getInAppOtp(dto: InAppOtpDtoGetDetails) {
+  async getInAppOtp(dto: InAppOtpDtoGetDetails) {
     return this.otpApiService.getOtp(dto, OTPService.IN_APP);
   }
 
-  validateInAppOtp(dto: InAppOtpDtoValidate) {
+  async validateInAppOtp(dto: InAppOtpDtoValidate) {
     return this.otpApiService.validateOtp(dto, OTPService.IN_APP);
   }
+
+  async validateDevice(deviceId: string) {
+    return this.otpApiService.validateDevice(deviceId);
+  }
+
+  async generateToken() {
+    return this.otpApiService.generateToken(
+      this.config.apiKey,
+      await this.createSignature()
+    );
+  }
+
+  async createSignature() {
+    const apiKey = this.config.apiKey;
+    const secretKey = this.config.secretKey;
+    const currentDate = getCurrentDate(DateFormat.DMY);
+    const data = [apiKey, secretKey, currentDate.trim()].join('|');
+    console.log('data==>', data);
+    return createHashSignature(data);
+  }
 }
+

@@ -3,13 +3,13 @@ import { MlClientApi } from '@ml-workspace/auth-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
-  createSignature,
+  createInAppSignature,
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
   OTPOperation,
   OTPService,
 } from '@ml-workspace/common';
-import { OTP } from '../../route';
+import { AUTHSERVICE, OTP, URLS } from '../../route';
 
 @Injectable()
 export class OtpApiService {
@@ -22,50 +22,80 @@ export class OtpApiService {
   async getOtp(dto: InAppOtpDtoGetDetails, service: OTPService): Promise<any> {
     const { baseUrl, url } = this.getUrls(service, OTPOperation.GET_DETAILS);
 
-    const signature = createSignature(dto, this.config.otpSalt);
+    const signature = createInAppSignature(dto, this.config.otpSalt);
 
     if (signature !== dto.signature) {
       throw new Error('Invalid signature...');
     }
 
+    const { mobileNumber, ...restData } = dto;
+
     const payload = {
-      ...dto,
-      Mobileno: dto.mobileNumber,
+      ...restData,
+      Mobileno: mobileNumber,
     };
 
     const response = await this.mlClientApi.sendRequest({
       url,
       data: payload,
-      baseURL: baseUrl,
       method: 'POST',
+      baseURL: baseUrl,
     });
     return response.data;
   }
 
   async validateOtp(
-    data: InAppOtpDtoValidate,
+    dto: InAppOtpDtoValidate,
     service: OTPService
   ): Promise<any> {
     const { baseUrl, url } = this.getUrls(service, OTPOperation.VALIDATE_OTP);
 
-    console.log('urls==>', { baseUrl, url });
+    const { mobileNumber, serviceType, ...restData } = dto;
 
     const payload = {
-      ...data,
-      mobile_no: data.mobileNumber,
-      service_type: data.serviceType,
+      ...restData,
+      service_type: serviceType,
+      mobile_no: mobileNumber,
     };
 
     const response = await this.mlClientApi.sendRequest({
       url,
       data: payload,
-      baseURL: baseUrl,
       method: 'POST',
+      baseURL: baseUrl,
     });
+
     return response.data;
   }
 
-  private getUrls(service: OTPService, action?: OTPOperation) {
+  async validateDevice(data: any): Promise<any> {
+    const response = await this.mlClientApi.sendRequest({
+      data,
+      method: 'POST',
+      url: URLS.VALIDATE_DEVICE,
+      baseURL: this.config.validateDeviceUrl,
+    });
+
+    return response.data;
+  }
+
+  async generateToken(apiKey: string, signature: string) {
+    const data = { apiKey, signature };
+
+    const response = await this.mlClientApi.sendRequest({
+      data,
+      method: 'POST',
+      url: AUTHSERVICE.GENERATE_TOKEN,
+      baseURL: this.config.authServiceUrl,
+    });
+
+    return response.data.data;
+  }
+
+  private getUrls(
+    service: OTPService,
+    action?: OTPOperation
+  ): { baseUrl: string; url: string } {
     const isSms = service === OTPService.SMS;
 
     switch (action) {

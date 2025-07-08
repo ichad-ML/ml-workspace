@@ -6,3 +6,11 @@ export const OTP = {
   SMS_GET_SMS: '/SMS/GetSMS',
   SMS_VALIDATE: '/SMS/ValidateOTP',
 };
+
+export const AUTHSERVICE = {
+  GENERATE_TOKEN: '/api/v1/external-user',
+};
+
+export const URLS = {
+  VALIDATE_DEVICE: '/api/money-accounts/validate-device',
+};

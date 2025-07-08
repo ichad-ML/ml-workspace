@@ -21,4 +21,14 @@ export class InAppOtpController {
   validateInAppOtp(@Body() requestDto: InAppOtpDtoValidate) {
     return this.inAppOtpService.validateInAppOtp(requestDto);
   }
+
+  @Post('/validate-device')
+  validateDevice(@Body() deviceId: string) {
+    return this.inAppOtpService.validateDevice(deviceId);
+  }
+
+  @Post('/generate-token')
+  generateToken() {
+    return this.inAppOtpService.generateToken();
+  }
 }

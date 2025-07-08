@@ -1,6 +1,7 @@
 import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
 import { TransactionType } from '../enums/otp.enum';
 import { Expose } from 'class-transformer';
+import { PickType } from '@nestjs/swagger';
 
 export class InAppOtpDtoGetDetails {
   @IsString()
@@ -19,20 +20,6 @@ export class InAppOtpDtoGetDetails {
   @Expose({ name: 'mobileno' })
   mobileNumber: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @Expose({ name: 'deviceID' })
-  deviceId: string;
-
-  @IsNotEmpty()
-  @IsEnum(TransactionType)
-  serviceType: TransactionType;
-
-  @IsNotEmpty()
-  @IsString()
-  @Expose({ name: 'timelimit' })
-  timeLimit: string;
-
   @IsNotEmpty()
   @IsString()
   date: string;
@@ -41,9 +28,26 @@ export class InAppOtpDtoGetDetails {
   @IsString()
   @Expose({ name: 'Signature' })
   signature: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose({ name: 'deviceID' })
+  deviceId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose({ name: 'timelimit' })
+  timeLimit: string;
+
+  @IsNotEmpty()
+  @IsEnum(TransactionType)
+  serviceType: TransactionType;
 }
 
-export class InAppOtpDtoValidate {
+export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
+  'deviceId',
+  'timeLimit',
+]) {
   @IsString()
   @IsNotEmpty()
   @Length(11, 11, {
@@ -54,24 +58,16 @@ export class InAppOtpDtoValidate {
 
   @IsString()
   @IsNotEmpty()
-  @Expose({ name: 'deviceID' })
-  deviceId: string;
-
-  @IsString()
-  @IsNotEmpty()
   pin: string;
 
-  @IsString()
   @IsNotEmpty()
   @Expose({ name: 'service_type' })
-  serviceType: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Expose({ name: 'timelimit' })
-  timeLimit: string;
+  @IsEnum(TransactionType)
+  serviceType: TransactionType;
 
   @IsString()
   @IsNotEmpty()
   token: string;
 }
+
+

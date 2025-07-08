@@ -1,7 +1,10 @@
-import { OtpApiService } from "@ml-workspace/api-lib";
-import { Functions } from "@ml-workspace/common";
-import { otpConfig } from "@ml-workspace/config";
-import { ConfigType } from "@nestjs/config";
+import { OtpApiService } from '@ml-workspace/api-lib';
+import { otpConfig } from '@ml-workspace/config';
+import { ConfigType } from '@nestjs/config';
+
+export type Functions<T> = Partial<{
+  [K in keyof T]: T[K];
+}>;
 
 export const mockOtpApiService: Functions<OtpApiService> = {
   async getOtp<T>(): Promise<T> {
