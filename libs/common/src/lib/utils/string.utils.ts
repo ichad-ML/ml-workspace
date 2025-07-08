@@ -1,5 +1,7 @@
 import { createHash } from 'crypto';
 import { InAppOtpDtoGetDetails } from '../dtos/otp.dto';
+import { getCurrentDate } from './date.utils';
+import { DateFormat } from '../enums/date.enum';
 
 export function createInAppSignature(
   dto: InAppOtpDtoGetDetails,
@@ -27,10 +29,19 @@ export function createInAppSignature(
     salt?.trim(),
   ].join(DELIMITER);
 
-  const res = createHashSignature(dataToHash);
-  console.log('res==>', res);
-  return res;
+  return createHashSignature(dataToHash);
 }
+
+export function createSignatureForToken(
+  apiKey: string,
+  secretKey: string
+): string {
+  const currentDate = getCurrentDate(DateFormat.YMD);
+  const data = [apiKey, secretKey, currentDate.trim()].join('|');
+
+  return createHashSignature(data);
+}
+
 
 export function createHashSignature(data: string): string {
   return createHash('sha512').update(data).digest('hex');

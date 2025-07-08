@@ -3,10 +3,8 @@ import { OTP, OtpApiService } from '@ml-workspace/api-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
-  createHashSignature,
   createInAppSignature,
-  DateFormat,
-  getCurrentDate,
+  createSignatureForToken,
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
   InAppOtpResponseDto,
@@ -56,6 +54,9 @@ export class InAppOtpService {
 
     const { mobileNumber, serviceType, ...restData } = dto;
 
+    const token = await this.generateToken();
+    console.log('token==>', token);
+
     const payload = {
       ...restData,
       service_type: serviceType,
@@ -66,21 +67,12 @@ export class InAppOtpService {
   }
 
   async generateToken() {
-    return this.otpApiService.generateToken(
-      this.config.apiKey,
-      await this.createSignature()
-    );
-  }
-
-  async createSignature() {
     const apiKey = this.config.apiKey;
     const secretKey = this.config.secretKey;
 
-    const currentDate = getCurrentDate(DateFormat.YMD);
-    const data = [apiKey, secretKey, currentDate.trim()].join('|');
+    const signature = createSignatureForToken(apiKey, secretKey);
 
-    console.log('data==>', data);
-    return createHashSignature(data);
+    return this.otpApiService.generateToken(apiKey, signature);
   }
 
   private getUrls(
