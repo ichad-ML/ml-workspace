@@ -44,6 +44,28 @@ export class InAppOtpDtoGetDetails {
   serviceType: TransactionType;
 }
 
+export class InAppOtpResponseDto {
+  @IsString()
+  @IsNotEmpty()
+  code: string;
+
+  @IsString()
+  @IsNotEmpty()
+  message: string;
+
+  @IsString()
+  @IsNotEmpty()
+  otp: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+}
+
 export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
   'deviceId',
   'timeLimit',

@@ -4,6 +4,7 @@ import { JwtAuthGuard } from '@ml-workspace/auth-lib';
 import {
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
+  InAppOtpResponseDto,
 } from '@ml-workspace/common';
 
 // @UseGuards(JwtAuthGuard)
@@ -12,23 +13,16 @@ export class InAppOtpController {
   constructor(private readonly inAppOtpService: InAppOtpService) {}
 
   @Post('/')
-  getInAppOtp(@Body() requestDto: InAppOtpDtoGetDetails) {
-    console.log('Transformed DTO:', requestDto);
+  async getInAppOtp(
+    @Body() requestDto: InAppOtpDtoGetDetails
+  ): Promise<InAppOtpResponseDto> {
     return this.inAppOtpService.getInAppOtp(requestDto);
   }
 
   @Post('/validate')
-  validateInAppOtp(@Body() requestDto: InAppOtpDtoValidate) {
+  validateInAppOtp(
+    @Body() requestDto: InAppOtpDtoValidate
+  ): Promise<InAppOtpResponseDto> {
     return this.inAppOtpService.validateInAppOtp(requestDto);
-  }
-
-  @Post('/validate-device')
-  validateDevice(@Body() deviceId: string) {
-    return this.inAppOtpService.validateDevice(deviceId);
-  }
-
-  @Post('/generate-token')
-  generateToken() {
-    return this.inAppOtpService.generateToken();
   }
 }
