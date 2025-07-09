@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  NotFoundException,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { InAppOtpService } from './in-app-otp.service';
 import { JwtAuthGuard } from '@ml-workspace/auth-lib';
 import {

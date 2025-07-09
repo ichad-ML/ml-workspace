@@ -11,6 +11,7 @@ import {
   OTPOperation,
   OTPService,
 } from '@ml-workspace/common';
+import { authenticator } from 'otplib';
 
 @Injectable()
 export class InAppOtpService {
@@ -19,6 +20,26 @@ export class InAppOtpService {
     private readonly config: ConfigType<typeof otpConfig>,
     private readonly otpApiService: OtpApiService
   ) {}
+
+  generateSecret(): string {
+    return authenticator.generateSecret();
+  }
+
+  generateToken2(secret: string, timelimitSeconds = 30): string {
+    authenticator.options = {
+      step: timelimitSeconds, // <--- Set token validity period here
+    };
+
+    return authenticator.generate(secret);
+  }
+
+  verifyToken(secret: string, token: string, timelimitSeconds = 30): boolean {
+    authenticator.options = {
+      step: timelimitSeconds,
+    };
+
+    return authenticator.check(token, secret);
+  }
 
   async getInAppOtp(dto: InAppOtpDtoGetDetails): Promise<InAppOtpResponseDto> {
     const { baseUrl, url } = this.getUrls(
