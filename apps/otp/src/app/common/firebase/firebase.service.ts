@@ -9,9 +9,8 @@ export class FirebaseService implements OnModuleInit {
     if (!admin.apps.length) {
       admin.initializeApp({
         credential: admin.credential.cert({
-          projectId: 'ml-services-f5f30',
-          clientEmail:
-            'firebase-adminsdk-kybm7@ml-services-f5f30.iam.gserviceaccount.com',
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
           privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
         }),
       });

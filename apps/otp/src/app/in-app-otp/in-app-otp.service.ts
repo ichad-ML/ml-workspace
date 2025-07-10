@@ -27,28 +27,50 @@ export class InAppOtpService {
     private readonly firebaseService: FirebaseService
   ) {}
 
-  async requestInAppOtp(requestDto: InAppOtpDtoGetDetails) {
+  async requestInAppOtp(
+    dto: InAppOtpDtoGetDetails
+  ): Promise<InAppOtpResponseDto> {
     const secret = generateSecret();
-    const token = generateToken(secret, +requestDto.timeLimit);
+    const otp = generateToken(secret, dto.timeLimit);
 
-    const doc = await this.firebaseService.createInAppDocument({
+    const signature = createInAppSignature(dto, this.config.otpSalt);
+    
+    if (signature !== dto.signature) {
+      throw new BadRequestException('Invalid signature...');
+    }
+
+    const document = await this.firebaseService.createInAppDocument({
       secret,
-      ...requestDto,
+      ...dto,
     });
 
     return {
-      otp: token,
-      expiresIn: requestDto.timeLimit,
-      id: doc.id,
-    };
+      code: 201,
+      name: 'Success',
+      message: 'OTP successfully generated.',
+      OTP: otp,
+      timelimit: dto.timeLimit,
+      token: signature,
+      id: document.id,
+    } as unknown as InAppOtpResponseDto;
   }
 
-  async verifyOtp(requestDto: InAppOtpDtoValidate) {
-    const doc = await this.firebaseService.getDocument('in-app', requestDto.id);
+  async verifyOtp(dto: InAppOtpDtoValidate) {
+    const document = await this.firebaseService.getDocument('in-app', dto.id);
 
-    const secret = doc.secret;
-    const isValid = verifyToken(secret, requestDto.otp, +requestDto.timeLimit);
-    return { valid: isValid };
+    const isValid = verifyToken(document.secret, dto.otp, dto.timeLimit);
+
+    return isValid
+      ? {
+          code: 201,
+          name: 'Success',
+          message: 'Valid',
+        }
+      : {
+          code: 400,
+          name: 'Failed',
+          message: 'Invalid Token.',
+        };
   }
 
   async getInAppOtp(dto: InAppOtpDtoGetDetails): Promise<InAppOtpResponseDto> {
