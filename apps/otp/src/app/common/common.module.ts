@@ -2,6 +2,7 @@ import { Module, ValidationError, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { otpConfig } from '@ml-workspace/config';
+import { FirebaseService } from './firebase/firebase.service';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { otpConfig } from '@ml-workspace/config';
           },
         }),
     },
+    FirebaseService,
   ],
-  exports: [],
+  exports: [FirebaseService],
 })
 export class CommonModule {}
