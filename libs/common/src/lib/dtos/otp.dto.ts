@@ -1,6 +1,13 @@
-import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 import { TransactionType } from '../enums/otp.enum';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { PickType } from '@nestjs/swagger';
 
 export class InAppOtpDtoGetDetails {
@@ -34,10 +41,11 @@ export class InAppOtpDtoGetDetails {
   @Expose({ name: 'deviceID' })
   deviceId: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @Expose({ name: 'timelimit' })
-  timeLimit: string;
+  @Transform(({ value }) => Number(value))
+  timeLimit: number;
 
   @IsNotEmpty()
   @IsEnum(TransactionType)
@@ -45,9 +53,9 @@ export class InAppOtpDtoGetDetails {
 }
 
 export class InAppOtpResponseDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  code: string;
+  code: number;
 
   @IsString()
   @IsNotEmpty()
@@ -64,6 +72,10 @@ export class InAppOtpResponseDto {
   @IsString()
   @IsNotEmpty()
   token: string;
+
+  @IsString()
+  @IsOptional()
+  id?: string;
 }
 
 export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
@@ -80,7 +92,8 @@ export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
 
   @IsString()
   @IsNotEmpty()
-  pin: string;
+  @Expose({ name: 'pin' })
+  otp: string;
 
   @IsNotEmpty()
   @Expose({ name: 'service_type' })
@@ -90,6 +103,8 @@ export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
   @IsString()
   @IsNotEmpty()
   token: string;
+
+  @IsString()
+  @IsNotEmpty()
+  id: string;
 }
-
-

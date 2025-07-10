@@ -25,7 +25,7 @@ export function createInAppSignature(
     deviceId?.trim(),
     date?.trim(),
     serviceType?.trim(),
-    timeLimit?.trim(),
+    timeLimit,
     salt?.trim(),
   ].join(DELIMITER);
 
@@ -41,7 +41,6 @@ export function createSignatureForToken(
 
   return createHashSignature(data);
 }
-
 
 export function createHashSignature(data: string): string {
   return createHash('sha512').update(data).digest('hex');

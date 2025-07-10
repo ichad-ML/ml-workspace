@@ -11,14 +11,67 @@ import {
   OTPOperation,
   OTPService,
 } from '@ml-workspace/common';
+import {
+  generateSecret,
+  generateToken,
+  verifyToken,
+} from '../common/otp/otplib';
+import { FirebaseService } from '../common/firebase/firebase.service';
 
 @Injectable()
 export class InAppOtpService {
   constructor(
     @Inject(otpConfig.KEY)
     private readonly config: ConfigType<typeof otpConfig>,
-    private readonly otpApiService: OtpApiService
+    private readonly otpApiService: OtpApiService,
+    private readonly firebaseService: FirebaseService
   ) {}
+
+  async requestInAppOtp(
+    dto: InAppOtpDtoGetDetails
+  ): Promise<InAppOtpResponseDto> {
+    const secret = generateSecret();
+    const otp = generateToken(secret, dto.timeLimit);
+
+    const signature = createInAppSignature(dto, this.config.otpSalt);
+    
+    if (signature !== dto.signature) {
+      throw new BadRequestException('Invalid signature...');
+    }
+
+    const document = await this.firebaseService.createInAppDocument({
+      secret,
+      ...dto,
+    });
+
+    return {
+      code: 201,
+      name: 'Success',
+      message: 'OTP successfully generated.',
+      OTP: otp,
+      timelimit: dto.timeLimit,
+      token: signature,
+      id: document.id,
+    } as unknown as InAppOtpResponseDto;
+  }
+
+  async verifyOtp(dto: InAppOtpDtoValidate) {
+    const document = await this.firebaseService.getDocument('in-app', dto.id);
+
+    const isValid = verifyToken(document.secret, dto.otp, dto.timeLimit);
+
+    return isValid
+      ? {
+          code: 201,
+          name: 'Success',
+          message: 'Valid',
+        }
+      : {
+          code: 400,
+          name: 'Failed',
+          message: 'Invalid Token.',
+        };
+  }
 
   async getInAppOtp(dto: InAppOtpDtoGetDetails): Promise<InAppOtpResponseDto> {
     const { baseUrl, url } = this.getUrls(
