@@ -30,14 +30,14 @@ export class InAppOtpService {
   async requestInAppOtp(
     dto: InAppOtpDtoGetDetails
   ): Promise<InAppOtpResponseDto> {
-    const secret = generateSecret();
-    const otp = generateToken(secret, dto.timeLimit);
-
     const signature = createInAppSignature(dto, this.config.otpSalt);
-    
+
     if (signature !== dto.signature) {
       throw new BadRequestException('Invalid signature...');
     }
+
+    const secret = generateSecret();
+    const otp = generateToken(secret, dto.timeLimit);
 
     const document = await this.firebaseService.createInAppDocument({
       secret,
@@ -49,7 +49,7 @@ export class InAppOtpService {
       name: 'Success',
       message: 'OTP successfully generated.',
       OTP: otp,
-      timelimit: dto.timeLimit,
+      timelimit: dto.timeLimit.toString(),
       token: signature,
       id: document.id,
     } as unknown as InAppOtpResponseDto;
@@ -59,6 +59,12 @@ export class InAppOtpService {
     const document = await this.firebaseService.getDocument('in-app', dto.id);
 
     const isValid = verifyToken(document.secret, dto.otp, dto.timeLimit);
+
+    if (isValid) {
+      await this.firebaseService.updateDocument('in-app', dto.id, {
+        validate: { ...dto },
+      });
+    }
 
     return isValid
       ? {
