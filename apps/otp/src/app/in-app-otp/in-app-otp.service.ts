@@ -40,8 +40,7 @@ export class InAppOtpService {
     const otp = generateToken(secret, dto.timeLimit);
 
     const document = await this.firebaseService.createInAppDocument({
-      secret,
-      ...dto,
+      request: { ...dto, secret },
     });
 
     return {
@@ -58,7 +57,11 @@ export class InAppOtpService {
   async verifyOtp(dto: InAppOtpDtoValidate) {
     const document = await this.firebaseService.getDocument('in-app', dto.id);
 
-    const isValid = verifyToken(document.secret, dto.otp, dto.timeLimit);
+    const isValid = verifyToken(
+      document.request.secret,
+      dto.otp,
+      dto.timeLimit
+    );
 
     if (isValid) {
       await this.firebaseService.updateDocument('in-app', dto.id, {
