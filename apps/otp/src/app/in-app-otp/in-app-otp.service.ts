@@ -11,34 +11,44 @@ import {
   OTPOperation,
   OTPService,
 } from '@ml-workspace/common';
-import { authenticator } from 'otplib';
+import {
+  generateSecret,
+  generateToken,
+  verifyToken,
+} from '../common/otp/otplib';
+import { FirebaseService } from '../common/firebase/firebase.service';
 
 @Injectable()
 export class InAppOtpService {
   constructor(
     @Inject(otpConfig.KEY)
     private readonly config: ConfigType<typeof otpConfig>,
-    private readonly otpApiService: OtpApiService
+    private readonly otpApiService: OtpApiService,
+    private readonly firebaseService: FirebaseService
   ) {}
 
-  generateSecret(): string {
-    return authenticator.generateSecret();
+  async requestInAppOtp(requestDto: InAppOtpDtoGetDetails) {
+    const secret = generateSecret();
+    const token = generateToken(secret, +requestDto.timeLimit);
+
+    const doc = await this.firebaseService.createInAppDocument({
+      secret,
+      ...requestDto,
+    });
+
+    return {
+      otp: token,
+      expiresIn: requestDto.timeLimit,
+      id: doc.id,
+    };
   }
 
-  generateToken2(secret: string, timelimitSeconds = 30): string {
-    authenticator.options = {
-      step: timelimitSeconds, // <--- Set token validity period here
-    };
+  async verifyOtp(requestDto: InAppOtpDtoValidate) {
+    const doc = await this.firebaseService.getDocument('in-app', requestDto.id);
 
-    return authenticator.generate(secret);
-  }
-
-  verifyToken(secret: string, token: string, timelimitSeconds = 30): boolean {
-    authenticator.options = {
-      step: timelimitSeconds,
-    };
-
-    return authenticator.check(token, secret);
+    const secret = doc.secret;
+    const isValid = verifyToken(secret, requestDto.otp, +requestDto.timeLimit);
+    return { valid: isValid };
   }
 
   async getInAppOtp(dto: InAppOtpDtoGetDetails): Promise<InAppOtpResponseDto> {
