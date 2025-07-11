@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { OTP, OtpApiService } from '@ml-workspace/api-lib';
+import { OtpApiService } from '@ml-workspace/api-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
@@ -12,14 +12,8 @@ import {
   InAppOtpDtoValidate,
   InAppOtpResponseDto,
   MESSAGE,
-  OTPOperation,
-  OTPService,
 } from '@ml-workspace/common';
-import {
-  generateSecret,
-  generateToken,
-  verifyToken,
-} from '../common/otp/otplib';
+import { generateOTP, generateSecret, verifyToken } from '../common/otp/otplib';
 import { FirebaseService } from '../common/firebase/firebase.service';
 
 @Injectable()
@@ -34,10 +28,15 @@ export class InAppOtpService {
   async requestInAppOtp(
     dto: InAppOtpDtoGetDetails
   ): Promise<InAppOtpResponseDto> {
-    await this.otpApiService.validateDevice(dto.deviceId, dto.mobileNumber);
+    const { token } = await this.generateToken();
+
+    await this.otpApiService.validateDevice(
+      dto.deviceId,
+      dto.mobileNumber,
+      token
+    );
 
     const currentDate = getCurrentDate(DateFormat.YMD_Hms);
-
     const signature = createInAppSignature(dto, this.config.otpSalt);
 
     if (signature !== dto.signature) {
@@ -45,7 +44,7 @@ export class InAppOtpService {
     }
 
     const secret = generateSecret();
-    const otp = generateToken(secret, dto.timeLimit);
+    const otp = generateOTP(secret, dto.timeLimit);
 
     const {
       deviceId,
@@ -56,7 +55,7 @@ export class InAppOtpService {
     } = dto;
 
     const document = await this.firebaseService.createInAppDocument({
-      request: { ...restData, requestedAt: currentDate, secret },
+      request: { ...restData, requestedAt: currentDate, secret, otp },
     });
 
     return {
@@ -81,15 +80,15 @@ export class InAppOtpService {
 
     if (isExpired || !isValid) throw new BadRequestException(message);
 
-    const time = getCurrentDate(DateFormat.YMD_Hms);
+    const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
     await this.firebaseService.updateDocument('in-app', dto.id, {
       validate: {
-        otp: dto.otp,
-        validatedAt: time,
-        isExpired,
         isValid,
         message,
+        isExpired,
+        otp: dto.otp,
+        validatedAt: currentTime,
       },
     });
 
@@ -98,6 +97,15 @@ export class InAppOtpService {
       code: CODE.SUCCESS,
       name: MESSAGE.SUCCESS,
     };
+  }
+
+  async generateToken() {
+    const apiKey = this.config.apiKey;
+    const secretKey = this.config.secretKey;
+
+    const signature = await createTokenSignature(apiKey, secretKey);
+
+    return this.otpApiService.generateToken(apiKey, signature);
   }
 
   // async getInAppOtp(dto: InAppOtpDtoGetDetails): Promise<InAppOtpResponseDto> {
@@ -141,15 +149,6 @@ export class InAppOtpService {
   //   } as unknown as InAppOtpDtoValidate;
 
   //   return this.otpApiService.validateOtp(payload, url, baseUrl);
-  // }
-
-  // async generateToken() {
-  //   const apiKey = this.config.apiKey;
-  //   const secretKey = this.config.secretKey;
-
-  //   const signature = createTokenSignature(apiKey, secretKey);
-
-  //   return this.otpApiService.generateToken(apiKey, signature);
   // }
 
   // private getUrls(

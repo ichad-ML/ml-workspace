@@ -4,7 +4,7 @@ export function generateSecret(): string {
     return authenticator.generateSecret();
 }
     
-export function generateToken(secret: string, timelimitSeconds = 30): string {
+export function generateOTP(secret: string, timelimitSeconds = 30): string {
   authenticator.options = {
     step: timelimitSeconds, // validity period
   };
@@ -28,7 +28,7 @@ export function verifyToken(
     return {
       isValid: false,
       isExpired: false,
-      message: 'Invalid token.',
+      message: 'Invalid OTP.',
     };
   }
 
@@ -36,10 +36,10 @@ export function verifyToken(
     return {
       isValid: false,
       isExpired: true,
-      message: `Token expired.`,
+      message: `OTP expired.`,
     };
   }
 
-  return { isValid: true, isExpired: false, message: 'Token is Valid.' };
+  return { isValid: true, isExpired: false, message: 'OTP is Valid.' };
 }
   
