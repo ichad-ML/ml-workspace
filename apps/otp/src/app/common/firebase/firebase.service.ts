@@ -46,4 +46,12 @@ export class FirebaseService implements OnModuleInit {
 
     return { id: docSnap.id, ...docSnap.data() } as T & { id: string };
   }
+
+  async updateDocument<T = FirebaseFirestore.DocumentData>(
+    collection: 'in-app' | 'sms',
+    docId: string,
+    data: Partial<T>
+  ): Promise<void> {
+    await this.db.collection(collection).doc(docId).set(data, { merge: true });
+  }
 }
