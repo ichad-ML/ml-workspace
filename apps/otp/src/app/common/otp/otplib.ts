@@ -4,22 +4,42 @@ export function generateSecret(): string {
     return authenticator.generateSecret();
 }
     
-export function  generateToken(secret: string, timelimitSeconds = 30): string {
-    authenticator.options = {
-        step: timelimitSeconds, // <--- Set token validity period here
-    };
+export function generateToken(secret: string, timelimitSeconds = 30): string {
+  authenticator.options = {
+    step: timelimitSeconds, // validity period
+  };
 
-    return authenticator.generate(secret);
+  return authenticator.generate(secret);
 }
 
 export function verifyToken(
-    secret: string,
-    token: string,
-    timelimitSeconds = 30
-    ): boolean {
-    authenticator.options = {
-        step: timelimitSeconds,
-    };
+  secret: string,
+  token: string,
+  timelimitSeconds = 30
+): { isValid: boolean; isExpired: boolean; message: string } {
+  authenticator.options = {
+    step: timelimitSeconds,
+    window: 2,
+  };
 
-    return authenticator.check(token, secret);
+  const delta = authenticator.checkDelta(token, secret);
+
+  if (delta === null) {
+    return {
+      isValid: false,
+      isExpired: false,
+      message: 'Invalid token.',
+    };
+  }
+
+  if (delta < 0) {
+    return {
+      isValid: false,
+      isExpired: true,
+      message: `Token expired.`,
+    };
+  }
+
+  return { isValid: true, isExpired: false, message: 'Token is Valid.' };
 }
+  

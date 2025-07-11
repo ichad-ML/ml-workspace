@@ -32,7 +32,7 @@ export function createInAppSignature(
   return createHashSignature(dataToHash);
 }
 
-export function createSignatureForToken(
+export function createTokenSignature(
   apiKey: string,
   secretKey: string
 ): string {

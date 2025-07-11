@@ -13,7 +13,9 @@ export class InAppOtpController {
   constructor(private readonly inAppOtpService: InAppOtpService) {}
 
   @Post('/')
-  async requestInAppOtp(@Body() requestDto: InAppOtpDtoGetDetails) {
+  async requestInAppOtp(
+    @Body() requestDto: InAppOtpDtoGetDetails
+  ): Promise<InAppOtpResponseDto> {
     return this.inAppOtpService.requestInAppOtp(requestDto);
   }
 
