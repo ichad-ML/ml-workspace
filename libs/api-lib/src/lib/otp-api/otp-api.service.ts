@@ -48,20 +48,25 @@ export class OtpApiService {
 
   async validateDevice(
     deviceUniqueId: string,
-    mobileNumber: string
+    mobileNumber: string,
+    token?: string
   ): Promise<any> {
-    const response = await this.mlClientApi.sendRequest({
-      data: { deviceUniqueId, mobileNumber },
-      method: 'POST',
-      url: URLS.VALIDATE_DEVICE,
-      baseURL: this.config.validateDeviceUrl,
-    });
+    const response = await this.mlClientApi.sendRequest(
+      {
+        data: { deviceUniqueId, mobileNumber },
+        method: 'POST',
+        url: URLS.VALIDATE_DEVICE,
+        baseURL: this.config.validateDeviceUrl,
+      },
+      token
+    );
 
     return response.data;
   }
 
   async generateToken(apiKey: string, signature: string) {
     const data = { apiKey, signature };
+    console.log('data===>', data);
 
     const response = await this.mlClientApi.sendRequest({
       data,

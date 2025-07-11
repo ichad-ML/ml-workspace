@@ -32,14 +32,16 @@ export function createInAppSignature(
   return createHashSignature(dataToHash);
 }
 
-export function createSignatureForToken(
+export async function createTokenSignature(
   apiKey: string,
   secretKey: string
-): string {
+): Promise<string> {
   const currentDate = getCurrentDate(DateFormat.YMD);
   const data = [apiKey, secretKey, currentDate.trim()].join('|');
 
-  return createHashSignature(data);
+  const hash = createHashSignature(data);
+  console.log('hash===>', hash);
+  return hash;
 }
 
 export function createHashSignature(data: string): string {
