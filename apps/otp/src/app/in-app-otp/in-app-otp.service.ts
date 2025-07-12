@@ -4,6 +4,7 @@ import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
   CODE,
+  Collection,
   createInAppSignature,
   createTokenSignature,
   DateFormat,
@@ -15,6 +16,7 @@ import {
 } from '@ml-workspace/common';
 import { generateOTP, generateSecret, verifyOTP } from '../common/otp/otplib';
 import { FirebaseService } from '../common/firebase/firebase.service';
+import { decryptAES, encryptAES } from '../common/utils/otp-encryption';
 
 @Injectable()
 export class InAppOtpService {
@@ -46,6 +48,8 @@ export class InAppOtpService {
     const secret = generateSecret();
     const otp = generateOTP(secret, dto.timeLimit);
 
+    const { iv, encrypted } = encryptAES(secret);
+
     const {
       deviceId,
       password,
@@ -54,43 +58,56 @@ export class InAppOtpService {
       ...restData
     } = dto;
 
-    const document = await this.firebaseService.createInAppDocument({
-      request: { ...restData, requestedAt: currentDate, secret, otp },
-    });
+    const document = await this.firebaseService.createCollection(
+      Collection.IN_APP,
+      {
+        request: {
+          iv,
+          ...restData,
+          requestedAt: currentDate,
+          secretKey: encrypted,
+        },
+      }
+    );
 
     return {
+      otp,
+      id: document.id,
       code: CODE.SUCCESS,
       name: MESSAGE.SUCCESS,
-      OTP: otp,
-      id: document.id,
-      token: signature,
       message: 'OTP successfully generated.',
-      timelimit: dto.timeLimit.toString(),
-    } as unknown as InAppOtpResponseDto;
+    };
   }
 
   async verifyOtp(dto: InAppOtpDtoValidate) {
-    const document = await this.firebaseService.getDocument('in-app', dto.id);
+    const document = await this.firebaseService.getDocument(
+      Collection.IN_APP,
+      dto.id
+    );
 
     if (document?.validate?.otpUsed) {
       throw new BadRequestException('OTP has already been used.');
     }
 
+    const encryptedSecret = document?.request?.secretKey;
+    const iv = document?.request?.iv;
+
+    const secret = decryptAES(encryptedSecret, iv);
+
     const { isValid, isExpired, message } = verifyOTP(
-      document.request.secret,
+      secret,
       dto.otp,
       dto.timeLimit
     );
 
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
-    await this.firebaseService.updateDocument('in-app', dto.id, {
+    await this.firebaseService.updateDocument(Collection.IN_APP, dto.id, {
       validate: {
         isValid,
         message,
         isExpired,
-        otpUsed: true,
-        otp: dto.otp,
+        otpUsed: isValid && !isExpired ? true : false,
         validatedAt: currentTime,
       },
     });
@@ -105,8 +122,8 @@ export class InAppOtpService {
   }
 
   async generateToken() {
-    const apiKey = this.config.apiKey;
-    const secretKey = this.config.secretKey;
+    const apiKey = this.config.authApiKey;
+    const secretKey = this.config.authSecretKey;
 
     const signature = await createTokenSignature(apiKey, secretKey);
 

@@ -32,7 +32,6 @@ export class OtpApiService {
 
   async generateToken(apiKey: string, signature: string) {
     const data = { apiKey, signature };
-    console.log('data===>', data);
 
     const response = await this.mlClientApi.sendRequest({
       data,

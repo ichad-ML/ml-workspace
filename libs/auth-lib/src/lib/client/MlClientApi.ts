@@ -12,6 +12,8 @@ export class MlClientApi {
       };
     }
 
+    console.log('config:', config);
+
     try {
       const response = await axios.request(config);
       return response;

@@ -1,18 +1,17 @@
 import { OtpApiService } from '@ml-workspace/api-lib';
 import {
   CODE,
+  Collection,
   createInAppSignature,
   createTokenSignature,
   DateFormat,
   getCurrentDate,
   MESSAGE,
-  OTPService,
 } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { generateOTP, generateSecret, verifyOTP } from '../common/otp/otplib';
-import { verify } from 'crypto';
 import { FirebaseService } from '../common/firebase/firebase.service';
 
 @Injectable()
@@ -51,9 +50,12 @@ export class SmsOtpService {
       ...restData
     } = dto;
 
-    const document = await this.firebaseService.createSmsDocument({
-      request: { ...restData, requestedAt: currentDate, secret, otp },
-    });
+    const document = await this.firebaseService.createCollection(
+      Collection.SMS,
+      {
+        request: { ...restData, requestedAt: currentDate, secret, otp },
+      }
+    );
 
     return {
       code: CODE.SUCCESS,
@@ -71,8 +73,8 @@ export class SmsOtpService {
   }
 
   async generateToken() {
-    const apiKey = this.config.apiKey;
-    const secretKey = this.config.secretKey;
+    const apiKey = this.config.authApiKey;
+    const secretKey = this.config.authSecretKey;
 
     const signature = await createTokenSignature(apiKey, secretKey);
 
