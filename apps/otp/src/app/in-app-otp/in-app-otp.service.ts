@@ -13,7 +13,7 @@ import {
   InAppOtpResponseDto,
   MESSAGE,
 } from '@ml-workspace/common';
-import { generateOTP, generateSecret, verifyToken } from '../common/otp/otplib';
+import { generateOTP, generateSecret, verifyOTP } from '../common/otp/otplib';
 import { FirebaseService } from '../common/firebase/firebase.service';
 
 @Injectable()
@@ -72,13 +72,15 @@ export class InAppOtpService {
   async verifyOtp(dto: InAppOtpDtoValidate) {
     const document = await this.firebaseService.getDocument('in-app', dto.id);
 
-    const { isValid, isExpired, message } = verifyToken(
+    if (document?.validate?.otpUsed) {
+      throw new BadRequestException('OTP has already been used.');
+    }
+
+    const { isValid, isExpired, message } = verifyOTP(
       document.request.secret,
       dto.otp,
       dto.timeLimit
     );
-
-    if (isExpired || !isValid) throw new BadRequestException(message);
 
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
@@ -87,10 +89,13 @@ export class InAppOtpService {
         isValid,
         message,
         isExpired,
+        otpUsed: true,
         otp: dto.otp,
         validatedAt: currentTime,
       },
     });
+
+    if (isExpired || !isValid) throw new BadRequestException(message);
 
     return {
       message,

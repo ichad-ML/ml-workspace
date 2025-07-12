@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { getCurrentFormattedDate } from '@ml-workspace/common';
+import { getCurrentDate } from '@ml-workspace/common';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
@@ -41,7 +41,7 @@ export class JwtAuthGuard implements CanActivate {
         return false;
       }
 
-      if (decoded.date !== getCurrentFormattedDate()) {
+      if (decoded.date !== getCurrentDate()) {
         return false;
       }
 

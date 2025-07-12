@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { InAppOtpService } from './in-app-otp.service';
-import { JwtAuthGuard } from '@ml-workspace/auth-lib';
+import { JwtAuthGuard, OtpRateLimitGuard } from '@ml-workspace/auth-lib';
 import {
   InAppOtpDtoGetDetails,
   InAppOtpDtoValidate,
@@ -8,6 +8,7 @@ import {
 } from '@ml-workspace/common';
 
 // @UseGuards(JwtAuthGuard)
+@UseGuards(OtpRateLimitGuard)
 @Controller('in-app-otp')
 export class InAppOtpController {
   constructor(private readonly inAppOtpService: InAppOtpService) {}
@@ -19,7 +20,7 @@ export class InAppOtpController {
     return this.inAppOtpService.requestInAppOtp(requestDto);
   }
 
-  @Post('verify')
+  @Post('/verify')
   async verifyOtp(@Body() requestDto: InAppOtpDtoValidate) {
     return this.inAppOtpService.verifyOtp(requestDto);
   }
