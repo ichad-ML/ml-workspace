@@ -12,7 +12,7 @@ export function generateOTP(secret: string, timelimitSeconds = 30): string {
   return authenticator.generate(secret);
 }
 
-export function verifyToken(
+export function verifyOTP(
   secret: string,
   token: string,
   timelimitSeconds = 30
