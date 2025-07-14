@@ -24,18 +24,4 @@ export class InAppOtpController {
   async verifyOtp(@Body() requestDto: InAppOtpDtoValidate) {
     return this.inAppOtpService.verifyOtp(requestDto);
   }
-
-  // @Post('/in-app-otp')
-  // async getInAppOtp(
-  //   @Body() requestDto: InAppOtpDtoGetDetails
-  // ): Promise<InAppOtpResponseDto> {
-  //   return this.inAppOtpService.getInAppOtp(requestDto);
-  // }
-
-  // @Post('/validate')
-  // validateInAppOtp(
-  //   @Body() requestDto: InAppOtpDtoValidate
-  // ): Promise<InAppOtpResponseDto> {
-  //   return this.inAppOtpService.validateInAppOtp(requestDto);
-  // }
 }

@@ -42,33 +42,4 @@ export class OtpApiService {
 
     return response.data.data;
   }
-
-  // async getOtp(
-  //   data: InAppOtpDtoGetDetails,
-  //   url: string,
-  //   baseUrl: string
-  // ): Promise<InAppOtpResponseDto> {
-  //   const response = await this.mlClientApi.sendRequest({
-  //     url,
-  //     data,
-  //     method: 'POST',
-  //     baseURL: baseUrl,
-  //   });
-  //   return response.data;
-  // }
-
-  // async validateOtp(
-  //   data: InAppOtpDtoValidate,
-  //   url: string,
-  //   baseUrl: string
-  // ): Promise<InAppOtpResponseDto> {
-  //   const response = await this.mlClientApi.sendRequest({
-  //     url,
-  //     data,
-  //     method: 'POST',
-  //     baseURL: baseUrl,
-  //   });
-
-  //   return response.data;
-  // }
 }

@@ -58,7 +58,7 @@ export class InAppOtpService {
       ...restData
     } = dto;
 
-    const document = await this.firebaseService.createCollection(
+    const document = await this.firebaseService.createDocument(
       Collection.IN_APP,
       {
         request: {
@@ -129,72 +129,4 @@ export class InAppOtpService {
 
     return this.otpApiService.generateToken(apiKey, signature);
   }
-
-  // async getInAppOtp(dto: InAppOtpDtoGetDetails): Promise<InAppOtpResponseDto> {
-  //   const { baseUrl, url } = this.getUrls(
-  //     OTPService.IN_APP,
-  //     OTPOperation.GET_DETAILS
-  //   );
-
-  //   const signature = createInAppSignature(dto, this.config.otpSalt);
-
-  //   if (signature !== dto.signature) {
-  //     throw new BadRequestException('Invalid signature...');
-  //   }
-
-  //   const { mobileNumber, ...restData } = dto;
-
-  //   const payload = {
-  //     ...restData,
-  //     Mobileno: mobileNumber,
-  //   } as unknown as InAppOtpDtoGetDetails;
-
-  //   return this.otpApiService.getOtp(payload, url, baseUrl);
-  // }
-
-  // async validateInAppOtp(
-  //   dto: InAppOtpDtoValidate
-  // ): Promise<InAppOtpResponseDto> {
-  //   // await this.otpApiService.validateDevice(dto.deviceId, dto.mobileNumber);
-
-  //   const { baseUrl, url } = this.getUrls(
-  //     OTPService.IN_APP,
-  //     OTPOperation.VALIDATE_OTP
-  //   );
-
-  //   const { mobileNumber, serviceType, ...restData } = dto;
-
-  //   const payload = {
-  //     ...restData,
-  //     service_type: serviceType,
-  //     mobile_no: mobileNumber,
-  //   } as unknown as InAppOtpDtoValidate;
-
-  //   return this.otpApiService.validateOtp(payload, url, baseUrl);
-  // }
-
-  // private getUrls(
-  //   service: OTPService,
-  //   action?: OTPOperation
-  // ): { baseUrl: string; url: string } {
-  //   const isSms = service === OTPService.SMS;
-
-  //   switch (action) {
-  //     case OTPOperation.VALIDATE_OTP:
-  //       return {
-  //         baseUrl: isSms
-  //           ? this.config.smsOtpBaseUrl
-  //           : this.config.inAppOtpBaseUrlValidate,
-  //         url: isSms ? OTP.SMS_VALIDATE : OTP.IN_APP_VALIDATE,
-  //       };
-
-  //     default:
-  //       return {
-  //         baseUrl: isSms
-  //           ? this.config.smsOtpBaseUrl
-  //           : this.config.inAppOtpBaseUrlGetDetails,
-  //         url: isSms ? OTP.SMS_GET_SMS : OTP.IN_APP_GET_DETAILS,
-  //       };
-  //   }
-  // }
 }

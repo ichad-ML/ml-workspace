@@ -24,7 +24,7 @@ export class FirebaseService implements OnModuleInit {
     return this.db;
   }
 
-  async createCollection(app: Collection, data: any) {
+  async createDocument(app: Collection, data: any) {
     return this.db.collection(app).add(data);
   }
 

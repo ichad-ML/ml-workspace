@@ -1,10 +1,5 @@
-import { authenticator } from "otplib";
-
-type VerifyOTPResponse = {
-  isValid: boolean;
-  isExpired: boolean;
-  message: string;
-};
+import { VerifyOTPResponse } from '@ml-workspace/common';
+import { authenticator } from 'otplib';
 
 export function generateSecret(): string {
   return authenticator.generateSecret();
@@ -60,4 +55,3 @@ export function verifyOTP(
     message: 'Unable to verify OTP.',
   };
 }
-  

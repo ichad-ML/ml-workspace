@@ -6,6 +6,7 @@ import {
   createTokenSignature,
   DateFormat,
   getCurrentDate,
+  InAppOtpResponseDto,
   MESSAGE,
 } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
@@ -50,12 +51,9 @@ export class SmsOtpService {
       ...restData
     } = dto;
 
-    const document = await this.firebaseService.createCollection(
-      Collection.SMS,
-      {
-        request: { ...restData, requestedAt: currentDate, secret, otp },
-      }
-    );
+    const document = await this.firebaseService.createDocument(Collection.SMS, {
+      request: { ...restData, requestedAt: currentDate, secret, otp },
+    });
 
     return {
       code: CODE.SUCCESS,
@@ -69,7 +67,7 @@ export class SmsOtpService {
   }
 
   async validateSmsOtp(data: any) {
-    return verifyOTP(data.otp, data.secret, data.timeLimit);
+    return verifyOTP(data.otp, data.secret, data.timeLimit) as any;
   }
 
   async generateToken() {
