@@ -7,13 +7,13 @@ import { JwtAuthGuard } from '@ml-workspace/auth-lib';
 export class SmsOtpController {
   constructor(private readonly smsOtpService: SmsOtpService) {}
 
-  @Get('/')
-  getSmsOtp(body: any) {
-    return this.smsOtpService.getSmsOtp(body);
+  @Post('/')
+  async requestSmsOtp(body: any) {
+    return this.smsOtpService.requestSmsOtp(body);
   }
 
-  @Post('/validate')
-  validateSmsOtp(@Body() body: any) {
+  @Post('/verify')
+  async validateOtp(@Body() body: any) {
     return this.smsOtpService.validateSmsOtp(body);
   }
 }

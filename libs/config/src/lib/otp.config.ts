@@ -30,8 +30,8 @@ export default registerAs('otpConfig', async () => {
     authServiceUrl: process.env.AUTH_SERVICE_BASE_URL || '',
 
     otpSalt: process.env.OTP_SALT || '',
-    apiKey: process.env.API_KEY || '',
-    secretKey: process.env.SECRET_KEY || '',
+    authApiKey: process.env.AUTH_API_KEY || '',
+    authSecretKey: process.env.AUTH_SECRET_KEY || '',
   };
 
   validateConfigSchema('otpConfig', config, schema);

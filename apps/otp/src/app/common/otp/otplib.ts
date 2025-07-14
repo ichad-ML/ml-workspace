@@ -1,9 +1,10 @@
-import { authenticator } from "otplib";
+import { VerifyOTPResponse } from '@ml-workspace/common';
+import { authenticator } from 'otplib';
 
 export function generateSecret(): string {
-    return authenticator.generateSecret();
+  return authenticator.generateSecret();
 }
-    
+
 export function generateOTP(secret: string, timelimitSeconds = 30): string {
   authenticator.options = {
     step: timelimitSeconds, // validity period
@@ -12,11 +13,11 @@ export function generateOTP(secret: string, timelimitSeconds = 30): string {
   return authenticator.generate(secret);
 }
 
-export function verifyToken(
+export function verifyOTP(
   secret: string,
   token: string,
   timelimitSeconds = 30
-): { isValid: boolean; isExpired: boolean; message: string } {
+): VerifyOTPResponse {
   authenticator.options = {
     step: timelimitSeconds,
     window: 2,
@@ -40,6 +41,17 @@ export function verifyToken(
     };
   }
 
-  return { isValid: true, isExpired: false, message: 'OTP is Valid.' };
+  if (delta >= 0) {
+    return {
+      isValid: true,
+      isExpired: false,
+      message: 'OTP is valid.',
+    };
+  }
+
+  return {
+    isValid: false,
+    isExpired: false,
+    message: 'Unable to verify OTP.',
+  };
 }
-  

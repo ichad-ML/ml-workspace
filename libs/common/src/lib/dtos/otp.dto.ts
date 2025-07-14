@@ -57,9 +57,9 @@ export class InAppOtpResponseDto {
   @IsNotEmpty()
   code: number;
 
-  @IsString()
-  @IsNotEmpty()
-  message: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // message: string;
 
   @IsString()
   @IsNotEmpty()
@@ -69,13 +69,17 @@ export class InAppOtpResponseDto {
   @IsNotEmpty()
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  token: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // token: string;
 
   @IsString()
   @IsOptional()
   id?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  message: string;
 }
 
 export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
