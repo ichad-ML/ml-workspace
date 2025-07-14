@@ -7,7 +7,7 @@ export type Functions<T> = Partial<{
 }>;
 
 export const mockOtpApiService: Functions<OtpApiService> = {
-  async getOtp<T>(): Promise<T> {
+  async validateDevice<T>(): Promise<T> {
     return {} as T;
   },
 };

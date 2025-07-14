@@ -1,4 +1,5 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Collection } from '@ml-workspace/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 @Injectable()
@@ -23,16 +24,12 @@ export class FirebaseService implements OnModuleInit {
     return this.db;
   }
 
-  async createInAppDocument(data: any) {
-    return this.db.collection('in-app').add(data);
-  }
-
-  async createSmsDocument(data: any) {
-    return this.db.collection('sms').add(data);
+  async createDocument(app: Collection, data: any) {
+    return this.db.collection(app).add(data);
   }
 
   async getDocument<T = FirebaseFirestore.DocumentData>(
-    collection: 'in-app' | 'sms',
+    collection: Collection,
     docId: string
   ): Promise<T & { id: string }> {
     const docRef = this.db.collection(collection).doc(docId);
@@ -48,7 +45,7 @@ export class FirebaseService implements OnModuleInit {
   }
 
   async updateDocument<T = FirebaseFirestore.DocumentData>(
-    collection: 'in-app' | 'sms',
+    collection: Collection,
     docId: string,
     data: Partial<T>
   ): Promise<void> {

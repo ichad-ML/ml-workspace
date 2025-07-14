@@ -39,9 +39,7 @@ export async function createTokenSignature(
   const currentDate = getCurrentDate(DateFormat.YMD);
   const data = [apiKey, secretKey, currentDate.trim()].join('|');
 
-  const hash = createHashSignature(data);
-  console.log('hash===>', hash);
-  return hash;
+  return createHashSignature(data);
 }
 
 export function createHashSignature(data: string): string {

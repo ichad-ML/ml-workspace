@@ -1,3 +1,8 @@
+export enum Collection {
+  IN_APP = 'in-app',
+  SMS = 'sms',
+}
+
 export enum TransactionType {
   LOGIN = 'LOGIN',
   CASH_IN = 'CASH_IN',

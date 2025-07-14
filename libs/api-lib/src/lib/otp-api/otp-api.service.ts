@@ -3,11 +3,6 @@ import { MlClientApi } from '@ml-workspace/auth-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import { AUTHSERVICE, URLS } from '../../route';
-import {
-  InAppOtpDtoGetDetails,
-  InAppOtpDtoValidate,
-  InAppOtpResponseDto,
-} from '@ml-workspace/common';
 
 @Injectable()
 export class OtpApiService {
@@ -16,35 +11,6 @@ export class OtpApiService {
     private readonly config: ConfigType<typeof otpConfig>,
     private readonly mlClientApi: MlClientApi
   ) {}
-
-  async getOtp(
-    data: InAppOtpDtoGetDetails,
-    url: string,
-    baseUrl: string
-  ): Promise<InAppOtpResponseDto> {
-    const response = await this.mlClientApi.sendRequest({
-      url,
-      data,
-      method: 'POST',
-      baseURL: baseUrl,
-    });
-    return response.data;
-  }
-
-  async validateOtp(
-    data: InAppOtpDtoValidate,
-    url: string,
-    baseUrl: string
-  ): Promise<InAppOtpResponseDto> {
-    const response = await this.mlClientApi.sendRequest({
-      url,
-      data,
-      method: 'POST',
-      baseURL: baseUrl,
-    });
-
-    return response.data;
-  }
 
   async validateDevice(
     deviceUniqueId: string,
@@ -66,7 +32,6 @@ export class OtpApiService {
 
   async generateToken(apiKey: string, signature: string) {
     const data = { apiKey, signature };
-    console.log('data===>', data);
 
     const response = await this.mlClientApi.sendRequest({
       data,
