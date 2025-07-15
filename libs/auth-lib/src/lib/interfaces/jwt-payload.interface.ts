@@ -1,5 +1,5 @@
 export interface JwtPayload {
   apiKey: string;
-  date: string;
+  iat: string;
   [key: string]: any;
 }

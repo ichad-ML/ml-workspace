@@ -3,11 +3,11 @@ import { InAppOtpService } from './in-app-otp.service';
 import { JwtAuthGuard, OtpRateLimitGuard } from '@ml-workspace/auth-lib';
 import {
   InAppOtpDtoGetDetails,
-  InAppOtpDtoValidate,
   InAppOtpResponseDto,
+  InAppOtpValidateDto,
 } from '@ml-workspace/common';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @UseGuards(OtpRateLimitGuard)
 @Controller('in-app-otp')
 export class InAppOtpController {
@@ -21,7 +21,7 @@ export class InAppOtpController {
   }
 
   @Post('/verify')
-  async verifyOtp(@Body() requestDto: InAppOtpDtoValidate) {
+  async verifyOtp(@Body() requestDto: InAppOtpValidateDto) {
     return this.inAppOtpService.verifyOtp(requestDto);
   }
 }

@@ -82,7 +82,7 @@ export class InAppOtpResponseDto {
   message: string;
 }
 
-export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
+export class InAppOtpValidateDto extends PickType(InAppOtpDtoGetDetails, [
   'deviceId',
   'timeLimit',
 ]) {
