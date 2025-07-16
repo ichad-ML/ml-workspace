@@ -1,6 +1,11 @@
 import { OtpApiService } from '@ml-workspace/api-lib';
-import { mockOtpApiService, mockOtpConfig } from '../common/utils/mocks';
+import {
+  mockFirebaseService,
+  mockOtpApiService,
+  mockOtpConfig,
+} from '../common/utils/mocks';
 import { InAppOtpService } from './in-app-otp.service';
+import { FirebaseService } from '../common/firebase/firebase.service';
 
 describe('InAppOtpService', () => {
   let inAppOtpService: InAppOtpService;
@@ -8,7 +13,8 @@ describe('InAppOtpService', () => {
   beforeAll(() => {
     inAppOtpService = new InAppOtpService(
       mockOtpConfig,
-      mockOtpApiService as OtpApiService
+      mockOtpApiService as OtpApiService,
+      mockFirebaseService as FirebaseService
     );
   });
 
