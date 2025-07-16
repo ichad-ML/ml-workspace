@@ -8,6 +8,7 @@ import {
   getCurrentDate,
   InAppOtpResponseDto,
   MESSAGE,
+  SmsOtpRequestDto,
 } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
@@ -24,43 +25,43 @@ export class SmsOtpService {
     private readonly firebaseService: FirebaseService
   ) {}
 
-  async requestSmsOtp(dto: any) {
+  async requestSmsOtp(dto: SmsOtpRequestDto) {
     const { token } = await this.generateToken();
 
-    await this.otpApiService.validateDevice(
-      dto.deviceId,
-      dto.mobileNumber,
-      token
-    );
+    // await this.otpApiService.validateDevice(
+    //   dto.password,
+    //   dto.mobileNumber,
+    //   token
+    // );
 
     const currentDate = getCurrentDate(DateFormat.YMD_Hms);
-    const signature = createInAppSignature(dto, this.config.otpSalt);
+    // const signature = createInAppSignature(dto, this.config.otpSalt);
 
-    if (signature !== dto.signature) {
-      throw new BadRequestException('Invalid signature...');
-    }
+    // if (signature !== dto.signature) {
+    //   throw new BadRequestException('Invalid signature...');
+    // }
 
-    const secret = generateSecret();
-    const otp = generateOTP(secret, dto.timeLimit);
+    // const secret = generateSecret();
+    // const otp = generateOTP(secret, dto.timeLimit);
 
-    const {
-      deviceId,
-      password,
-      signature: dtoSignature,
-      date,
-      ...restData
-    } = dto;
+    // const {
+    //   deviceId,
+    //   password,
+    //   signature: dtoSignature,
+    //   date,
+    //   ...restData
+    // } = dto;
 
     const document = await this.firebaseService.createDocument(Collection.SMS, {
-      request: { ...restData, requestedAt: currentDate, secret, otp },
+      request: { ...dto, requestedAt: currentDate },
     });
 
     return {
       code: CODE.SUCCESS,
       name: MESSAGE.SUCCESS,
-      OTP: otp,
+      // OTP: otp,
       id: document.id,
-      token: signature,
+      // token: signature,
       message: 'OTP successfully generated.',
       timelimit: dto.timeLimit.toString(),
     };

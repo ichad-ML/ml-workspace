@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { getCurrentDate } from '@ml-workspace/common';
+import { DateFormat, getCurrentDate } from '@ml-workspace/common';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
@@ -23,17 +23,18 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException('Token missing');
     }
 
-    const secretKey = this.configService.get<string>('SECRET_KEY');
-    const apiKey = this.configService.get<string>('API_KEY');
+    const secretKey = this.configService.get<string>('JWT_SECRET_KEY');
+    const apiKey = this.configService.get<string>('JWT_API_KEY');
 
     if (!secretKey || !apiKey) {
       throw new UnauthorizedException('JWT secret is not defined');
     }
 
     try {
-      const decoded = jwt.verify(token, secretKey) as JwtPayload;
+      const decoded = jwt.verify(token, secretKey) as unknown as JwtPayload;
+      console.log('decoded=>', decoded);
 
-      if (!decoded.apiKey || !decoded.date) {
+      if (!decoded.apiKey || !decoded.iat) {
         return false;
       }
 
@@ -41,7 +42,24 @@ export class JwtAuthGuard implements CanActivate {
         return false;
       }
 
-      if (decoded.date !== getCurrentDate()) {
+      const currentTime = Math.floor(Date.now() / 1000);
+      const tokenIssuedAt = decoded.iat;
+
+      const ageInSeconds = currentTime - +tokenIssuedAt;
+      console.log(
+        'time difference in seconds:',
+        ageInSeconds,
+        'currentTime:',
+        currentTime,
+        'tokenIssuedAt:',
+        tokenIssuedAt
+      );
+
+      if (ageInSeconds > 60) {
+        return false;
+      }
+
+      if (+tokenIssuedAt > currentTime) {
         return false;
       }
 
