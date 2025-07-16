@@ -82,7 +82,7 @@ export class InAppOtpResponseDto {
   message: string;
 }
 
-export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
+export class InAppOtpValidateDto extends PickType(InAppOtpDtoGetDetails, [
   'deviceId',
   'timeLimit',
 ]) {
@@ -111,4 +111,33 @@ export class InAppOtpDtoValidate extends PickType(InAppOtpDtoGetDetails, [
   @IsString()
   @IsNotEmpty()
   id: string;
+}
+
+export class SmsOtpRequestDto {
+  @IsString()
+  @IsNotEmpty()
+  @Expose({ name: 'mobileno' })
+  mobileNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose({ name: 'service_type' })
+  serviceType: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose({ name: 'otp_msg' })
+  otpMessage: string;
+
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  timeLimit: number;
 }

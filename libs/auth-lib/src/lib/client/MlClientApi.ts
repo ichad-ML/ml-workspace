@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class MlClientApi {
+  private readonly logger = new Logger(MlClientApi.name);
   async sendRequest(config: AxiosRequestConfig, token?: string): Promise<any> {
-    
     if (token) {
       config.headers = {
         ...config.headers,
@@ -12,16 +12,16 @@ export class MlClientApi {
       };
     }
 
-    console.log('config:', config);
+    this.logger.log(`\nConfig: ${JSON.stringify(config, null, 2)}`);
 
     try {
       const response = await axios.request(config);
       return response;
     } catch (error: any) {
       if (error.response) {
-        console.error('Server responded with an error:', error.response.data);
-        console.error('Status:', error.response.status);
-        console.error('Headers:', error.response.headers);
+        this.logger.error('Server responded with an error:', error.response.data);
+        this.logger.error('Status:', error.response.status);
+        this.logger.error('Headers:', error.response.headers);
       }
       throw new BadRequestException(error.message);
     }
