@@ -8,13 +8,14 @@ import {
   getCurrentDate,
   InAppOtpResponseDto,
   MESSAGE,
-  SmsOtpRequestDto,
+  SmsGetOtp,
 } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { generateOTP, generateSecret, verifyOTP } from '../common/otp/otplib';
 import { FirebaseService } from '../common/firebase/firebase.service';
+import { decryptAES, encryptAES } from '../common/utils/otp-encryption';
 
 @Injectable()
 export class SmsOtpService {
@@ -25,11 +26,11 @@ export class SmsOtpService {
     private readonly firebaseService: FirebaseService
   ) {}
 
-  async requestSmsOtp(dto: SmsOtpRequestDto) {
-    const { token } = await this.generateToken();
+  async requestSmsOtp(dto: SmsGetOtp) {
+    // const { token } = await this.generateToken();
 
     // await this.otpApiService.validateDevice(
-    //   dto.password,
+    //   dto.deviceId,
     //   dto.mobileNumber,
     //   token
     // );
@@ -41,19 +42,20 @@ export class SmsOtpService {
     //   throw new BadRequestException('Invalid signature...');
     // }
 
-    // const secret = generateSecret();
-    // const otp = generateOTP(secret, dto.timeLimit);
+    const secret = generateSecret();
+    const otp = generateOTP(secret);
 
-    // const {
-    //   deviceId,
-    //   password,
-    //   signature: dtoSignature,
-    //   date,
-    //   ...restData
-    // } = dto;
+    const { iv, encrypted } = encryptAES(secret);
+
+    const { password, ...restData } = dto;
 
     const document = await this.firebaseService.createDocument(Collection.SMS, {
-      request: { ...dto, requestedAt: currentDate },
+      request: {
+        iv,
+        ...restData,
+        requestedAt: currentDate,
+        secretKey: encrypted,
+      },
     });
 
     return {
@@ -61,14 +63,46 @@ export class SmsOtpService {
       name: MESSAGE.SUCCESS,
       // OTP: otp,
       id: document.id,
-      // token: signature,
       message: 'OTP successfully generated.',
-      timelimit: dto.timeLimit.toString(),
     };
   }
 
-  async validateSmsOtp(data: any) {
-    return verifyOTP(data.otp, data.secret, data.timeLimit) as any;
+  async verifySmsOtp(dto: any) {
+    const document = await this.firebaseService.getDocument(
+      Collection.SMS,
+      dto.id
+    );
+
+    if (document?.validate?.otpUsed) {
+      throw new BadRequestException('OTP has already been used.');
+    }
+
+    const encryptedSecret = document?.request?.secretKey;
+    const iv = document?.request?.iv;
+
+    const secret = decryptAES(encryptedSecret, iv);
+
+    const { isValid, isExpired, message } = verifyOTP(secret, dto.otp);
+
+    const currentTime = getCurrentDate(DateFormat.YMD_Hms);
+
+    await this.firebaseService.updateDocument(Collection.IN_APP, dto.id, {
+      validate: {
+        isValid,
+        message,
+        isExpired,
+        otpUsed: isValid && !isExpired ? true : false,
+        validatedAt: currentTime,
+      },
+    });
+
+    if (isExpired || !isValid) throw new BadRequestException(message);
+
+    return {
+      message,
+      code: CODE.SUCCESS,
+      name: MESSAGE.SUCCESS,
+    };
   }
 
   async generateToken() {

@@ -5,7 +5,7 @@ export function generateSecret(): string {
   return authenticator.generateSecret();
 }
 
-export function generateOTP(secret: string, timelimitSeconds = 30): string {
+export function generateOTP(secret: string, timelimitSeconds = 60): string {
   authenticator.options = {
     step: timelimitSeconds, // validity period
   };
@@ -16,37 +16,25 @@ export function generateOTP(secret: string, timelimitSeconds = 30): string {
 export function verifyOTP(
   secret: string,
   token: string,
-  timelimitSeconds = 30
+  timelimitSeconds = 60
 ): VerifyOTPResponse {
   authenticator.options = {
     step: timelimitSeconds,
-    window: 2,
+    window: 1,
   };
 
   const delta = authenticator.checkDelta(token, secret);
 
   if (delta === null) {
-    return {
-      isValid: false,
-      isExpired: false,
-      message: 'Invalid OTP.',
-    };
+    return { isValid: false, isExpired: false, message: 'Invalid OTP.' };
   }
 
-  if (delta < 0) {
-    return {
-      isValid: false,
-      isExpired: true,
-      message: `OTP expired.`,
-    };
+  if (delta < -1) {
+    return { isValid: false, isExpired: true, message: 'OTP expired.' };
   }
 
-  if (delta >= 0) {
-    return {
-      isValid: true,
-      isExpired: false,
-      message: 'OTP is valid.',
-    };
+  if (delta >= -1 && delta <= 1) {
+    return { isValid: true, isExpired: false, message: 'OTP is valid.' };
   }
 
   return {
