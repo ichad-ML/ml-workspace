@@ -14,17 +14,23 @@ export class SmsService {
   ) {}
 
   async sendSms(dto: SmsDto) {
-    const token = await this.generateToken();
+      const token = await this.generateToken();
 
-    const response = await this.mlClientApi.sendRequest(
-      {
-        data: dto,
-        method: 'POST',
-        url: URLS.SEND_SMS,
-        baseURL: this.config.smsBaseUrl,
-      },
-      token
-    );
+      const data = {
+        messageType: dto.type,
+        text: dto.message,
+        destination: dto.mobileNumber,
+      };
+
+      const response = await this.mlClientApi.sendRequest(
+        {
+          data,
+          method: 'POST',
+          url: URLS.SEND_SMS,
+          baseURL: this.config.smsBaseUrl,
+        },
+        token
+      );
 
     return response.data;
   }

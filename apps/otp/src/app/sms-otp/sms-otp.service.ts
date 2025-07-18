@@ -45,11 +45,11 @@ export class SmsOtpService {
     const secret = generateSecret();
     const otp = generateOTP(secret);
 
-    // await this.otpApiService.validateDevice(
-    //   dto.deviceId,
-    //   dto.mobileNumber,
-    //   dto.token
-    // );
+    await this.otpApiService.requestOtp({
+      mobileNumber: dto.mobileNumber,
+      type: 'sms',
+      message: `Your OTP is ${otp}. It is valid for 5 minutes.`,
+    });
 
     const { iv, encrypted } = encryptAES(secret);
 
