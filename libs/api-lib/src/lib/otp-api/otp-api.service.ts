@@ -42,4 +42,23 @@ export class OtpApiService {
 
     return response.data.data;
   }
+
+  // async requestOtp(
+  //   mobileNumber: string,
+  //   deviceUniqueId: string,
+  //   otpType: string,
+  //   token?: string
+  // ): Promise<any> {
+  //   const response = await this.mlClientApi.sendRequest(
+  //     {
+  //       data: { mobileNumber, deviceUniqueId, otpType },
+  //       method: 'POST',
+  //       url: URLS.REQUEST_OTP,
+  //       baseURL: this.config.requestOtpUrl,
+  //     },
+  //     token
+  //   );
+
+  //   return response.data;
+  // }
 }

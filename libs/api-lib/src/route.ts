@@ -5,4 +5,5 @@ export const AUTHSERVICE = {
 export const URLS = {
   VALIDATE_DEVICE: '/api/money-accounts/validate-device',
   SEND_SMS: '/cgpapi/messages/sms', // SMART Connect API
+  SMS_AUTH_LOGIN: '/rest/auth/login', // SMART Auth login - for accessToken
 };

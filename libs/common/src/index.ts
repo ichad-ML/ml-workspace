@@ -5,6 +5,7 @@ export * from './lib/utils/string.utils';
 // DTOS
 export * from './lib/dtos/crm-score.dto';
 export * from './lib/dtos/otp.dto';
+export * from './lib/dtos/sms.dto';
 
 // Enums
 export * from './lib/enums/crm-score.enum';

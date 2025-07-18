@@ -45,6 +45,12 @@ export class SmsOtpService {
     const secret = generateSecret();
     const otp = generateOTP(secret);
 
+    // await this.otpApiService.validateDevice(
+    //   dto.deviceId,
+    //   dto.mobileNumber,
+    //   dto.token
+    // );
+
     const { iv, encrypted } = encryptAES(secret);
 
     const { password, ...restData } = dto;
