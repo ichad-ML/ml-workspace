@@ -3,8 +3,6 @@ import { otpConfig } from '@ml-workspace/config';
 import { ConfigType } from '@nestjs/config';
 import { FirebaseService } from '../firebase/firebase.service';
 
-declare const jest: any;
-
 export type Functions<T> = Partial<{
   [K in keyof T]: T[K];
 }>;
@@ -15,13 +13,16 @@ export const mockOtpApiService: Functions<OtpApiService> = {
   },
 };
 
-export const mockFirebaseService: Partial<FirebaseService> = {
-  firestore: {
-    collection: jest.fn().mockReturnValue({
-      add: jest.fn(),
-    }),
-  } as any,
-  createDocument: jest.fn(),
+export const mockFirebaseService: Functions<FirebaseService> = {
+  async createDocument<T>(): Promise<T> {
+    return {} as T;
+  },
+  async getDocument<T>(): Promise<T> {
+    return {} as T;
+  },
+  async updateDocument<T>(): Promise<T> {
+    return {} as T;
+  },
 };
 
 export const mockOtpConfig = {

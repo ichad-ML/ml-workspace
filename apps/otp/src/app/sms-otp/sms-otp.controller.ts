@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { SmsOtpService } from './sms-otp.service';
 import { JwtAuthGuard } from '@ml-workspace/auth-lib';
-import { SmsOtpRequestDto } from '@ml-workspace/common';
+import { SmsGetOtp } from '@ml-workspace/common';
 
 // @UseGuards(JwtAuthGuard)
 @Controller('sms-otp')
@@ -9,12 +9,13 @@ export class SmsOtpController {
   constructor(private readonly smsOtpService: SmsOtpService) {}
 
   @Post('/')
-  async requestSmsOtp(@Body() requestDto: SmsOtpRequestDto) {
+  async requestSmsOtp(@Body() requestDto: SmsGetOtp) {
+    console.log('requestDto==>', requestDto);
     return this.smsOtpService.requestSmsOtp(requestDto);
   }
 
   @Post('/verify')
-  async validateOtp(@Body() body: any) {
-    return this.smsOtpService.validateSmsOtp(body);
+  async verifySmsOtp(@Body() body: any) {
+    return this.smsOtpService.verifySmsOtp(body);
   }
 }

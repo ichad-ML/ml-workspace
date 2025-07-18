@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "otp": "nx serve otp --skip-nx-cache",
-    "crm-score": "nx serve crm-score --skip-nx-cache"
+    "crm-score": "nx serve crm-score --skip-nx-cache",
+    "sms": "nx serve sms --skip-nx-cache"
   },
   "private": true,
   "devDependencies": {

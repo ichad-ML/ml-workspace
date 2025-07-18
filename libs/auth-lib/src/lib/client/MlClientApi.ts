@@ -16,7 +16,7 @@ export class MlClientApi {
 
     try {
       const response = await axios.request(config);
-      return response;
+      return response.data;
     } catch (error: any) {
       if (error.response) {
         this.logger.error('Server responded with an error:', error.response.data);
