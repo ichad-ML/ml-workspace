@@ -14,7 +14,7 @@ describe('SmsOtpService', () => {
     smsOtpService = new SmsOtpService(
       mockOtpConfig,
       mockOtpApiService as OtpApiService,
-      mockFirebaseService as FirebaseService
+       mockFirebaseService as FirebaseService
     );
   });
 

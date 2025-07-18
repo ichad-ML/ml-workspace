@@ -42,4 +42,15 @@ export class OtpApiService {
 
     return response.data.data;
   }
+
+  async requestOtp(data: any): Promise<any> {
+    const response = await this.mlClientApi.sendRequest({
+      data,
+      method: 'POST',
+      url: URLS.REQUEST_OTP,
+      baseURL: this.config.smsOtpBaseUrl,
+    });
+
+    return response.data;
+  }
 }

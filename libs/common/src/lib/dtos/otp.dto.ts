@@ -113,16 +113,10 @@ export class InAppOtpValidateDto extends PickType(InAppOtpDtoGetDetails, [
   id: string;
 }
 
-export class SmsOtpRequestDto {
+export class SmsGetOtp {
   @IsString()
   @IsNotEmpty()
-  @Expose({ name: 'mobileno' })
-  mobileNumber: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Expose({ name: 'service_type' })
-  serviceType: string;
+  username: string;
 
   @IsString()
   @IsNotEmpty()
@@ -130,14 +124,28 @@ export class SmsOtpRequestDto {
 
   @IsString()
   @IsNotEmpty()
-  @Expose({ name: 'otp_msg' })
-  otpMessage: string;
+  @Length(11, 11, {
+    message: 'mobileNumber must be 11 digits',
+  })
+  @Expose({ name: 'mobileno' })
+  mobileNumber: string;
 
   @IsString()
   @IsNotEmpty()
-  username: string;
+  @Expose({ name: 'msg' })
+  message: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  timeLimit: number;
+  sender: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose({ name: 'sms_provider' })
+  smsProvider: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose({ name: 'service_type' })
+  serviceType: TransactionType;
 }
