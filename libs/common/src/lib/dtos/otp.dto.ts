@@ -113,7 +113,7 @@ export class InAppOtpValidateDto extends PickType(InAppOtpDtoGetDetails, [
   id: string;
 }
 
-export class SmsGetOtp {
+export class SmsOtpRequestDto {
   @IsString()
   @IsNotEmpty()
   username: string;

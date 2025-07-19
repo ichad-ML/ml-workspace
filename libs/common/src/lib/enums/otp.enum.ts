@@ -1,6 +1,7 @@
 export enum Collection {
   IN_APP = 'in-app-otp',
-  SMS = 'sms-otp',
+  SMS_OTP = 'sms-otp',
+  SMS = 'sms',
 }
 
 export enum TransactionType {
@@ -21,4 +22,8 @@ export enum OTPService {
 export enum OTPOperation {
   GET_DETAILS = 'GET_DETAILS',
   VALIDATE_OTP = 'VALIDATE_OTP',
+}
+
+export enum MessageType {
+  SMS = 'SMS',
 }

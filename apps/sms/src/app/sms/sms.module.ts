@@ -4,6 +4,9 @@ import { SmsController } from "./sms.controller";
 import { MlClientApi } from "@ml-workspace/auth-lib";
 import { ConfigModule } from "@nestjs/config";
 import { smsConfig } from "@ml-workspace/config";
+import { SmsApiService } from '../services/sms-api.service';
+import { FirebaseService } from '../services/firebase.service';
+import { TokenService } from '../services/token.service';
 
 @Module({
   imports: [
@@ -12,7 +15,13 @@ import { smsConfig } from "@ml-workspace/config";
       load: [smsConfig],
     }),
   ],
-  providers: [SmsService, MlClientApi],
+  providers: [
+    SmsService,
+    MlClientApi,
+    SmsApiService,
+    FirebaseService,
+    TokenService,
+  ],
   controllers: [SmsController],
   exports: [],
 })

@@ -1,9 +1,10 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { MessageType } from '../enums/otp.enum';
 
 export class SmsDto {
   @IsString()
   @IsNotEmpty()
-  type: string;
+  type: MessageType;
 
   @IsString()
   @IsNotEmpty()
@@ -12,4 +13,22 @@ export class SmsDto {
   @IsString()
   @IsNotEmpty()
   mobileNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  value: string;
+}
+
+export class SmsOtpResponseDto {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  destination: string;
+
+  @IsString()
+  @IsNotEmpty()
+  status: string;
 }
