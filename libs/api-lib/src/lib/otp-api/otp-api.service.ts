@@ -3,11 +3,7 @@ import { MlClientApi } from '@ml-workspace/auth-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import { AUTHSERVICE, URLS } from '../../route';
-import {
-  SmsDto,
-  SmsOtpRequestDto,
-  SmsOtpResponseDto,
-} from '@ml-workspace/common';
+import { SmsDto, SmsOtpResponseDto } from '@ml-workspace/common';
 
 @Injectable()
 export class OtpApiService {

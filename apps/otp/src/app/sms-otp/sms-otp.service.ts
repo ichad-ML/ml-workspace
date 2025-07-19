@@ -31,28 +31,33 @@ export class SmsOtpService {
     const secret = generateSecret();
     const otp = generateOTP(secret);
 
-    const message = `Your M.Lhuillier One-Time-Pin(OTP) is ${otp}. Please do not share this with anyone, including to those who claim to be ML personnel.`;
+    const message =
+      'Your M.Lhuillier One-Time-Pin(OTP) is {otp}. Please do not share this with anyone, including to those who claim to be ML personnel.';
 
     const response = await this.otpApiService.requestOTP({
       message,
       type: MessageType.SMS,
       mobileNumber: dto.mobileNumber,
+      value: `otp=${otp}`,
     });
 
     const { iv, encrypted } = encryptAES(secret);
 
     const { password, ...restData } = dto;
 
-    const document = await this.firebaseService.createDocument(Collection.SMS, {
-      request: {
-        iv,
-        ...restData,
-        requestedAt: currentDate,
-        secretKey: encrypted,
-        smsId: response.id,
-        smsStatus: response.status,
-      },
-    });
+    const document = await this.firebaseService.createDocument(
+      Collection.SMS_OTP,
+      {
+        request: {
+          iv,
+          ...restData,
+          requestedAt: currentDate,
+          secretKey: encrypted,
+          smsId: response.id,
+          smsStatus: response.status,
+        },
+      }
+    );
 
     return {
       id: document.id,
@@ -65,7 +70,7 @@ export class SmsOtpService {
 
   async verifySmsOtp(dto: any) {
     const document = await this.firebaseService.getDocument(
-      Collection.SMS,
+      Collection.SMS_OTP,
       dto.id
     );
 

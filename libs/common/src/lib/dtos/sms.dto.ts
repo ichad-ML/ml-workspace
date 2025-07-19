@@ -13,6 +13,10 @@ export class SmsDto {
   @IsString()
   @IsNotEmpty()
   mobileNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  value: string;
 }
 
 export class SmsOtpResponseDto {

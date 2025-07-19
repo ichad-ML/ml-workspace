@@ -19,9 +19,7 @@ export class MlClientApi {
       return response;
     } catch (error: any) {
       if (error.response) {
-        this.logger.error('Server responded with an error:', error.response.data);
-        this.logger.error('Status:', error.response.status);
-        this.logger.error('Headers:', error.response.headers);
+        this.logger.error('ERROR:', error.response.data);
       }
       throw new BadRequestException(error.message);
     }

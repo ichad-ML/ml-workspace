@@ -1,6 +1,7 @@
 export enum Collection {
   IN_APP = 'in-app-otp',
-  SMS = 'sms-otp',
+  SMS_OTP = 'sms-otp',
+  SMS = 'sms',
 }
 
 export enum TransactionType {
