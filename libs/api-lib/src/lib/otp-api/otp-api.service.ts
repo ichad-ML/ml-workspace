@@ -3,6 +3,7 @@ import { MlClientApi } from '@ml-workspace/auth-lib';
 import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import { AUTHSERVICE, URLS } from '../../route';
+import { SmsDto, SmsOtpResponseDto } from '@ml-workspace/common';
 
 @Injectable()
 export class OtpApiService {
@@ -43,7 +44,7 @@ export class OtpApiService {
     return response.data.data;
   }
 
-  async requestOtp(data: any): Promise<any> {
+  async sendSmsOTP(data: SmsDto): Promise<SmsOtpResponseDto> {
     const response = await this.mlClientApi.sendRequest({
       data,
       method: 'POST',
