@@ -7,7 +7,7 @@ import {
   InAppOtpValidateDto,
 } from '@ml-workspace/common';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @UseGuards(OtpRateLimitGuard)
 @Controller('in-app-otp')
 export class InAppOtpController {

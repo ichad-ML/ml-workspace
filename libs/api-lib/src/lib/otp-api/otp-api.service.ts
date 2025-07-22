@@ -44,7 +44,7 @@ export class OtpApiService {
     return response.data.data;
   }
 
-  async requestOTP(data: SmsDto): Promise<SmsOtpResponseDto> {
+  async sendSmsOTP(data: SmsDto): Promise<SmsOtpResponseDto> {
     const response = await this.mlClientApi.sendRequest({
       data,
       method: 'POST',

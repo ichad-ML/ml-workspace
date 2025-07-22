@@ -34,7 +34,7 @@ export class SmsOtpService {
     const message =
       'Your M.Lhuillier One-Time-Pin(OTP) is {otp}. Please do not share this with anyone, including to those who claim to be ML personnel.';
 
-    const response = await this.otpApiService.requestOTP({
+    const response = await this.otpApiService.sendSmsOTP({
       message,
       type: MessageType.SMS,
       mobileNumber: dto.mobileNumber,
@@ -87,7 +87,7 @@ export class SmsOtpService {
 
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
-    await this.firebaseService.updateDocument(Collection.IN_APP, dto.id, {
+    await this.firebaseService.updateDocument(Collection.SMS_OTP, dto.id, {
       validate: {
         isValid,
         message,
