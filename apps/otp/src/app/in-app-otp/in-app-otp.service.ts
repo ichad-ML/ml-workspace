@@ -12,7 +12,7 @@ import {
   InAppOtpResponseDto,
   InAppOtpValidateDto,
   MESSAGE,
-  OTPCollection,
+  CollectionType,
 } from '@ml-workspace/common';
 import { generateOTP, generateSecret, verifyOTP } from '../common/utils/otplib';
 import { FirebaseService } from '../common/firebase/firebase.service';
@@ -59,7 +59,7 @@ export class InAppOtpService {
     } = dto;
 
     const document = await this.firebaseService.createDocument(
-      OTPCollection.IN_APP_OTP,
+      CollectionType.IN_APP_OTP,
       {
         request: {
           iv,
@@ -81,7 +81,7 @@ export class InAppOtpService {
 
   async verifyOtp(dto: InAppOtpValidateDto) {
     const document = await this.firebaseService.getDocument(
-      OTPCollection.IN_APP_OTP,
+      CollectionType.IN_APP_OTP,
       dto.id
     );
 
@@ -103,7 +103,7 @@ export class InAppOtpService {
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
     await this.firebaseService.updateDocument(
-      OTPCollection.IN_APP_OTP,
+      CollectionType.IN_APP_OTP,
       dto.id,
       {
         validate: {

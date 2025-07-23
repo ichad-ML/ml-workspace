@@ -6,7 +6,7 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { OTPCollection, TransactionType } from '../enums/otp.enum';
+import { CollectionType, TransactionType } from '../enums/otp.enum';
 import { Expose, Transform } from 'class-transformer';
 import { PickType } from '@nestjs/swagger';
 
@@ -66,7 +66,6 @@ export class OtpRequestDto {
   @Length(11, 11, {
     message: 'mobileNumber must be 11 digits',
   })
-  @Expose({ name: 'mobileno' })
   mobileNumber: string;
 
   @IsNotEmpty()
@@ -75,17 +74,14 @@ export class OtpRequestDto {
 
   @IsNotEmpty()
   @IsString()
-  @Expose({ name: 'Signature' })
   signature: string;
 
   @IsString()
   @IsNotEmpty()
-  @Expose({ name: 'deviceID' })
   deviceId: string;
 
   @IsNumber()
   @IsNotEmpty()
-  @Expose({ name: 'timelimit' })
   @Transform(({ value }) => Number(value))
   timeLimit: number;
 
@@ -95,7 +91,45 @@ export class OtpRequestDto {
 
   @IsNotEmpty()
   @IsString()
-  otpType: OTPCollection;
+  otpType: CollectionType;
+}
+
+export class OtpVerifyDto {
+  @IsString()
+  @IsNotEmpty()
+  deviceId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  timeLimit: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(11, 11, {
+    message: 'mobileNumber must be 11 digits',
+  })
+  mobileNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  pin: string;
+
+  @IsNotEmpty()
+  @IsEnum(TransactionType)
+  serviceType: TransactionType;
+
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  otpType: CollectionType;
 }
 
 export class InAppOtpResponseDto {
@@ -160,7 +194,7 @@ export class InAppOtpValidateDto extends PickType(InAppOtpDtoGetDetails, [
 
   @IsString()
   @IsNotEmpty()
-  otpType: OTPCollection;
+  otpType: CollectionType;
 }
 
 export class SmsOtpRequestDto {

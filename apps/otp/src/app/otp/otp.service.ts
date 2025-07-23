@@ -3,9 +3,21 @@ import { otpConfig } from "@ml-workspace/config";
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { ConfigType } from "@nestjs/config";
 import { FirebaseService } from "../common/firebase/firebase.service";
-import { CODE, createInAppSignature, createTokenSignature, DateFormat, getCurrentDate, InAppOtpValidateDto, isSmsOTP, MESSAGE, MessageType, OTPCollection, OtpRequestDto } from "@ml-workspace/common";
-import { generateOTP, generateSecret, verifyOTP } from "../common/utils/otplib";
-import { decryptAES, encryptAES } from "../common/utils/otp-encryption";
+import {
+  CODE,
+  createInAppSignature,
+  createTokenSignature,
+  DateFormat,
+  getCurrentDate,
+  isSmsOTP,
+  MESSAGE,
+  MessageType,
+  CollectionType,
+  OtpRequestDto,
+  OtpVerifyDto,
+} from '@ml-workspace/common';
+import { generateOTP, generateSecret, verifyOTP } from '../common/utils/otplib';
+import { decryptAES, encryptAES } from '../common/utils/otp-encryption';
 
 @Injectable()
 export class OtpService {
@@ -16,7 +28,7 @@ export class OtpService {
     private readonly firebaseService: FirebaseService
   ) {}
 
-  async requestInAppOtp(dto: OtpRequestDto, collection: OTPCollection) {
+  async requestInAppOtp(dto: OtpRequestDto, collection: CollectionType) {
     const { token } = await this.generateToken();
 
     await this.otpApiService.validateDevice(
@@ -28,6 +40,8 @@ export class OtpService {
     const currentDate = getCurrentDate(DateFormat.YMD_Hms);
     const signature = createInAppSignature(dto, this.config.otpSalt);
 
+    console.log('signature=>', signature);
+
     if (signature !== dto.signature) {
       throw new BadRequestException('Invalid signature...');
     }
@@ -36,7 +50,8 @@ export class OtpService {
     const otp = generateOTP(secret, dto.timeLimit);
 
     let response;
-    if (isSmsOTP(dto.otpType)){
+
+    if (isSmsOTP(dto.otpType)) {
       response = await this.sendSmsOtp(otp, dto.mobileNumber);
     }
 
@@ -69,11 +84,8 @@ export class OtpService {
     };
   }
 
-  async verifyOtp(dto: InAppOtpValidateDto, collection: OTPCollection) {
-    const document = await this.firebaseService.getDocument(
-      collection,
-      dto.id
-    );
+  async verifyOtp(dto: OtpVerifyDto, collection: CollectionType) {
+    const document = await this.firebaseService.getDocument(collection, dto.id);
 
     if (document?.validate?.otpUsed) {
       throw new BadRequestException('OTP has already been used.');
@@ -84,7 +96,11 @@ export class OtpService {
 
     const secret = decryptAES(encryptedSecret, iv);
 
-    const { isValid, isExpired, message } = verifyOTP(secret, dto.otp, dto.timeLimit);
+    const { isValid, isExpired, message } = verifyOTP(
+      secret,
+      dto.pin,
+      dto.timeLimit
+    );
 
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
@@ -120,13 +136,13 @@ export class OtpService {
     const message =
       'Your M.Lhuillier One-Time-Pin(OTP) is {otp}. Please do not share this with anyone, including to those who claim to be ML personnel.';
 
-       const response = await this.otpApiService.sendSmsOTP({
-         message,
-         mobileNumber,
-         type: MessageType.SMS,
-         value: `otp=${otp}`,
-       });
-    
-    return response
+    const response = await this.otpApiService.sendSmsOTP({
+      message,
+      mobileNumber,
+      type: MessageType.SMS,
+      value: `otp=${otp}`,
+    });
+
+    return response;
   }
 }

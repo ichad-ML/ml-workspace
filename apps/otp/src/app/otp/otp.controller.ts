@@ -1,6 +1,11 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { OtpService } from "./otp.service";
-import { InAppOtpValidateDto, OTPCollection, OtpRequestDto } from "@ml-workspace/common";
+import {
+  InAppOtpValidateDto,
+  CollectionType,
+  OtpRequestDto,
+  OtpVerifyDto,
+} from '@ml-workspace/common';
 
 @Controller('otp')
 export class OtpController {
@@ -8,19 +13,25 @@ export class OtpController {
 
   @Post('/')
   async requestInAppOtp(@Body() requestDto: OtpRequestDto) {
-    if (requestDto.otpType === OTPCollection.SMS_OTP) {
-      return this.otpService.requestInAppOtp(requestDto, OTPCollection.SMS_OTP);
+    if (requestDto.otpType === CollectionType.SMS_OTP) {
+      return this.otpService.requestInAppOtp(
+        requestDto,
+        CollectionType.SMS_OTP
+      );
     }
 
-    return this.otpService.requestInAppOtp(requestDto, OTPCollection.IN_APP_OTP);
+    return this.otpService.requestInAppOtp(
+      requestDto,
+      CollectionType.IN_APP_OTP
+    );
   }
 
   @Post('/verify')
-  async verifyOtp(@Body() requestDto: InAppOtpValidateDto) {
-    if (requestDto.otpType === OTPCollection.SMS_OTP) {
-      return this.otpService.verifyOtp(requestDto, OTPCollection.SMS_OTP);
+  async verifyOtp(@Body() requestDto: OtpVerifyDto) {
+    if (requestDto.otpType === CollectionType.SMS_OTP) {
+      return this.otpService.verifyOtp(requestDto, CollectionType.SMS_OTP);
     }
 
-    return this.otpService.verifyOtp(requestDto, OTPCollection.IN_APP_OTP);
+    return this.otpService.verifyOtp(requestDto, CollectionType.IN_APP_OTP);
   }
 }

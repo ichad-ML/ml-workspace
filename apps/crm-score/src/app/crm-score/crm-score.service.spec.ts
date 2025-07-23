@@ -1,6 +1,9 @@
-import { Functions } from '@ml-workspace/common';
 import { CrmApiService } from '../api/crm-api.service';
 import { CrmScoreService } from './crm-score.service';
+
+export type Functions<T> = Partial<{
+  [K in keyof T]: T[K];
+}>;
 
 export const mockCrmApiService: Functions<CrmApiService> = {
   async getData<T>(): Promise<T> {
