@@ -1,6 +1,7 @@
 // Utils
 export * from './lib/utils/date.utils';
-export * from './lib/utils/string.utils';
+export * from './lib/utils/hash.utils';
+export * from './lib/utils/strings.util';
 
 // DTOS
 export * from './lib/dtos/crm-score.dto';

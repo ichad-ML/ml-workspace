@@ -1,18 +1,18 @@
 import { OtpApiService } from '@ml-workspace/api-lib';
 import {
   CODE,
-  Collection,
   createTokenSignature,
   DateFormat,
   getCurrentDate,
   MESSAGE,
   MessageType,
+  OTPCollection,
   SmsOtpRequestDto,
 } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
-import { generateOTP, generateSecret, verifyOTP } from '../common/otp/otplib';
+import { generateOTP, generateSecret, verifyOTP } from '../common/utils/otplib';
 import { FirebaseService } from '../common/firebase/firebase.service';
 import { decryptAES, encryptAES } from '../common/utils/otp-encryption';
 
@@ -43,13 +43,14 @@ export class SmsOtpService {
 
     const { iv, encrypted } = encryptAES(secret);
 
-    const { password, ...restData } = dto;
+    const { password, message: dtoMessage, ...restData } = dto;
 
     const document = await this.firebaseService.createDocument(
-      Collection.SMS_OTP,
+      OTPCollection.SMS_OTP,
       {
         request: {
           iv,
+          message,
           ...restData,
           requestedAt: currentDate,
           secretKey: encrypted,
@@ -70,7 +71,7 @@ export class SmsOtpService {
 
   async verifySmsOtp(dto: any) {
     const document = await this.firebaseService.getDocument(
-      Collection.SMS_OTP,
+      OTPCollection.SMS_OTP,
       dto.id
     );
 
@@ -87,7 +88,7 @@ export class SmsOtpService {
 
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
-    await this.firebaseService.updateDocument(Collection.SMS_OTP, dto.id, {
+    await this.firebaseService.updateDocument(OTPCollection.SMS_OTP, dto.id, {
       validate: {
         isValid,
         message,

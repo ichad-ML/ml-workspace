@@ -6,7 +6,7 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { TransactionType } from '../enums/otp.enum';
+import { CollectionType, TransactionType } from '../enums/otp.enum';
 import { Expose, Transform } from 'class-transformer';
 import { PickType } from '@nestjs/swagger';
 
@@ -50,6 +50,126 @@ export class InAppOtpDtoGetDetails {
   @IsNotEmpty()
   @IsEnum(TransactionType)
   serviceType: TransactionType;
+}
+
+export class OtpRequestDto {
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(11, 11, {
+    message: 'mobileNumber must be 11 digits',
+  })
+  mobileNumber: string;
+
+  @IsNotEmpty()
+  @IsString()
+  date: string;
+
+  @IsNotEmpty()
+  @IsString()
+  signature: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deviceId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  timeLimit: number;
+
+  @IsNotEmpty()
+  @IsEnum(TransactionType)
+  serviceType: TransactionType;
+
+  @IsNotEmpty()
+  @IsString()
+  otpType: CollectionType;
+}
+
+export class OtpResponseDto {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  code: number;
+
+  @IsString()
+  @IsNotEmpty()
+  otp: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  message: string;
+
+  @IsOptional()
+  @IsString()
+  smsStatus?: string;
+}
+
+export class OtpVerifyDto {
+  @IsString()
+  @IsNotEmpty()
+  deviceId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  timeLimit: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(11, 11, {
+    message: 'mobileNumber must be 11 digits',
+  })
+  mobileNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  pin: string;
+
+  @IsNotEmpty()
+  @IsEnum(TransactionType)
+  serviceType: TransactionType;
+
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  otpType: CollectionType;
+}
+
+export class OtpVerifyResponseDto {
+  @IsNumber()
+  @IsNotEmpty()
+  code: number;
+
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  message: string;
 }
 
 export class InAppOtpResponseDto {
@@ -111,6 +231,10 @@ export class InAppOtpValidateDto extends PickType(InAppOtpDtoGetDetails, [
   @IsString()
   @IsNotEmpty()
   id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  otpType: CollectionType;
 }
 
 export class SmsOtpRequestDto {
@@ -149,3 +273,5 @@ export class SmsOtpRequestDto {
   @Expose({ name: 'service_type' })
   serviceType: TransactionType;
 }
+
+
