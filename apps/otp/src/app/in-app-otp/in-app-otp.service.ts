@@ -4,7 +4,6 @@ import type { ConfigType } from '@nestjs/config';
 import { otpConfig } from '@ml-workspace/config';
 import {
   CODE,
-  Collection,
   createInAppSignature,
   createTokenSignature,
   DateFormat,
@@ -13,8 +12,9 @@ import {
   InAppOtpResponseDto,
   InAppOtpValidateDto,
   MESSAGE,
+  OTPCollection,
 } from '@ml-workspace/common';
-import { generateOTP, generateSecret, verifyOTP } from '../common/otp/otplib';
+import { generateOTP, generateSecret, verifyOTP } from '../common/utils/otplib';
 import { FirebaseService } from '../common/firebase/firebase.service';
 import { decryptAES, encryptAES } from '../common/utils/otp-encryption';
 
@@ -59,7 +59,7 @@ export class InAppOtpService {
     } = dto;
 
     const document = await this.firebaseService.createDocument(
-      Collection.IN_APP,
+      OTPCollection.IN_APP_OTP,
       {
         request: {
           iv,
@@ -81,7 +81,7 @@ export class InAppOtpService {
 
   async verifyOtp(dto: InAppOtpValidateDto) {
     const document = await this.firebaseService.getDocument(
-      Collection.IN_APP,
+      OTPCollection.IN_APP_OTP,
       dto.id
     );
 
@@ -102,15 +102,19 @@ export class InAppOtpService {
 
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
-    await this.firebaseService.updateDocument(Collection.IN_APP, dto.id, {
-      validate: {
-        isValid,
-        message,
-        isExpired,
-        otpUsed: isValid && !isExpired ? true : false,
-        validatedAt: currentTime,
-      },
-    });
+    await this.firebaseService.updateDocument(
+      OTPCollection.IN_APP_OTP,
+      dto.id,
+      {
+        validate: {
+          isValid,
+          message,
+          isExpired,
+          otpUsed: isValid && !isExpired ? true : false,
+          validatedAt: currentTime,
+        },
+      }
+    );
 
     if (isExpired || !isValid) throw new BadRequestException(message);
 

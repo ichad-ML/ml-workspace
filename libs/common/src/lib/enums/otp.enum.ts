@@ -1,5 +1,5 @@
-export enum Collection {
-  IN_APP = 'in-app-otp',
+export enum OTPCollection {
+  IN_APP_OTP = 'in-app-otp',
   SMS_OTP = 'sms-otp',
   SMS = 'sms',
 }
