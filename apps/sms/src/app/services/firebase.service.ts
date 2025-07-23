@@ -1,4 +1,8 @@
-import { Collection, DateFormat, getCurrentDate } from '@ml-workspace/common';
+import {
+  DateFormat,
+  getCurrentDate,
+  CollectionType,
+} from '@ml-workspace/common';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
@@ -24,13 +28,13 @@ export class FirebaseService implements OnModuleInit {
     return this.db;
   }
 
-  async createDocument(app: Collection, data: any) {
+  async createDocument(app: CollectionType, data: any) {
     const currentDate = getCurrentDate(DateFormat.YMD);
     return this.db.collection(app).doc(currentDate).set(data);
   }
 
   async getDocument<T = FirebaseFirestore.DocumentData>(
-    collection: Collection,
+    collection: CollectionType,
     docId: string
   ): Promise<T & { id: string }> {
     const docRef = this.db.collection(collection).doc(docId);
@@ -46,7 +50,7 @@ export class FirebaseService implements OnModuleInit {
   }
 
   async updateDocument<T = FirebaseFirestore.DocumentData>(
-    collection: Collection,
+    collection: CollectionType,
     docId: string,
     data: Partial<T>
   ): Promise<void> {

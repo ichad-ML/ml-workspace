@@ -1,10 +1,10 @@
 import { createHash } from 'crypto';
-import { InAppOtpDtoGetDetails } from '../dtos/otp.dto';
+import { InAppOtpDtoGetDetails, OtpRequestDto } from '../dtos/otp.dto';
 import { getCurrentDate } from './date.utils';
 import { DateFormat } from '../enums/date.enum';
 
 export function createInAppSignature(
-  dto: InAppOtpDtoGetDetails,
+  dto: InAppOtpDtoGetDetails | OtpRequestDto,
   salt: string
 ): string {
   const {
@@ -17,6 +17,8 @@ export function createInAppSignature(
     timeLimit,
   } = dto;
 
+  const otpType = 'otpType' in dto ? dto.otpType?.trim() : '';
+
   const DELIMITER = '|';
   const dataToHash = [
     username?.trim(),
@@ -26,6 +28,7 @@ export function createInAppSignature(
     date?.trim(),
     serviceType?.trim(),
     timeLimit,
+    otpType?.trim(),
     salt?.trim(),
   ].join(DELIMITER);
 
