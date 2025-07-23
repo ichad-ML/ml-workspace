@@ -1,10 +1,12 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { OtpService } from "./otp.service";
 import {
-  InAppOtpValidateDto,
   CollectionType,
   OtpRequestDto,
   OtpVerifyDto,
+  OtpResponseDto,
+  isSmsOTP,
+  OtpVerifyResponseDto,
 } from '@ml-workspace/common';
 
 @Controller('otp')
@@ -12,8 +14,10 @@ export class OtpController {
   constructor(private readonly otpService: OtpService) {}
 
   @Post('/')
-  async requestInAppOtp(@Body() requestDto: OtpRequestDto) {
-    if (requestDto.otpType === CollectionType.SMS_OTP) {
+  async requestInAppOtp(
+    @Body() requestDto: OtpRequestDto
+  ): Promise<OtpResponseDto> {
+    if (isSmsOTP(requestDto.otpType)) {
       return this.otpService.requestInAppOtp(
         requestDto,
         CollectionType.SMS_OTP
@@ -27,8 +31,10 @@ export class OtpController {
   }
 
   @Post('/verify')
-  async verifyOtp(@Body() requestDto: OtpVerifyDto) {
-    if (requestDto.otpType === CollectionType.SMS_OTP) {
+  async verifyOtp(
+    @Body() requestDto: OtpVerifyDto
+  ): Promise<OtpVerifyResponseDto> {
+    if (isSmsOTP(requestDto.otpType)) {
       return this.otpService.verifyOtp(requestDto, CollectionType.SMS_OTP);
     }
 

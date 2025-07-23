@@ -94,6 +94,32 @@ export class OtpRequestDto {
   otpType: CollectionType;
 }
 
+export class OtpResponseDto {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  code: number;
+
+  @IsString()
+  @IsNotEmpty()
+  otp: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  message: string;
+
+  @IsOptional()
+  @IsString()
+  smsStatus?: string;
+}
+
 export class OtpVerifyDto {
   @IsString()
   @IsNotEmpty()
@@ -130,6 +156,20 @@ export class OtpVerifyDto {
   @IsString()
   @IsNotEmpty()
   otpType: CollectionType;
+}
+
+export class OtpVerifyResponseDto {
+  @IsNumber()
+  @IsNotEmpty()
+  code: number;
+
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  message: string;
 }
 
 export class InAppOtpResponseDto {

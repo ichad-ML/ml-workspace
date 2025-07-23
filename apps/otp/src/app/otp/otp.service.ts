@@ -15,6 +15,8 @@ import {
   CollectionType,
   OtpRequestDto,
   OtpVerifyDto,
+  OtpResponseDto,
+  OtpVerifyResponseDto,
 } from '@ml-workspace/common';
 import { generateOTP, generateSecret, verifyOTP } from '../common/utils/otplib';
 import { decryptAES, encryptAES } from '../common/utils/otp-encryption';
@@ -28,7 +30,10 @@ export class OtpService {
     private readonly firebaseService: FirebaseService
   ) {}
 
-  async requestInAppOtp(dto: OtpRequestDto, collection: CollectionType) {
+  async requestInAppOtp(
+    dto: OtpRequestDto,
+    collection: CollectionType
+  ): Promise<OtpResponseDto> {
     const { token } = await this.generateToken();
 
     await this.otpApiService.validateDevice(
@@ -84,7 +89,10 @@ export class OtpService {
     };
   }
 
-  async verifyOtp(dto: OtpVerifyDto, collection: CollectionType) {
+  async verifyOtp(
+    dto: OtpVerifyDto,
+    collection: CollectionType
+  ): Promise<OtpVerifyResponseDto> {
     const document = await this.firebaseService.getDocument(collection, dto.id);
 
     if (document?.validate?.otpUsed) {
