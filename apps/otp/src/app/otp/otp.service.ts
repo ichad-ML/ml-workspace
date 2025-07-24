@@ -17,6 +17,7 @@ import {
   OtpVerifyDto,
   OtpResponseDto,
   OtpVerifyResponseDto,
+  CustomLoggerService,
 } from '@ml-workspace/common';
 import { generateOTP, generateSecret, verifyOTP } from '../common/utils/otplib';
 import { decryptAES, encryptAES } from '../common/utils/otp-encryption';
@@ -27,7 +28,8 @@ export class OtpService {
     @Inject(otpConfig.KEY)
     private readonly config: ConfigType<typeof otpConfig>,
     private readonly otpApiService: OtpApiService,
-    private readonly firebaseService: FirebaseService
+    private readonly firebaseService: FirebaseService,
+    private readonly logger: CustomLoggerService
   ) {}
 
   async requestInAppOtp(
@@ -44,8 +46,6 @@ export class OtpService {
 
     const currentDate = getCurrentDate(DateFormat.YMD_Hms);
     const signature = createInAppSignature(dto, this.config.otpSalt);
-
-    console.log('signature=>', signature);
 
     if (signature !== dto.signature) {
       throw new BadRequestException('Invalid signature...');

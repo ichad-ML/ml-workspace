@@ -17,3 +17,7 @@ export * from './lib/enums/string.enum';
 // Interfaces
 export * from './lib/interfaces/crm-score.interface';
 export * from './lib/interfaces/otp.interface';
+
+// Logger
+export * from './lib/logger/logger.module'
+export * from './lib/logger/logger.service'

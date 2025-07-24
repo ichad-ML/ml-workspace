@@ -7,6 +7,7 @@ import { smsConfig } from "@ml-workspace/config";
 import { SmsApiService } from '../services/sms-api.service';
 import { FirebaseService } from '../services/firebase.service';
 import { TokenService } from '../services/token.service';
+import { CustomLoggerService } from '@ml-workspace/common';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TokenService } from '../services/token.service';
     SmsApiService,
     FirebaseService,
     TokenService,
+    CustomLoggerService,
   ],
   controllers: [SmsController],
   exports: [],
