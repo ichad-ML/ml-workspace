@@ -8,7 +8,7 @@ export const winstonLogger = createLogger({
     format.errors({ stack: true }),
     format.colorize({all: true}),
     format.printf(({ timestamp, level, message, stack }) => {
-      return `['LoggerService'][${level}] ${timestamp} : ${stack || message}`;
+      return `[LoggerService][${level}] ${timestamp} : ${stack || message}`;
     })
   ),
   transports: [

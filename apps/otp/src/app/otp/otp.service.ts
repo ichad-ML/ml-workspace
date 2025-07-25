@@ -62,13 +62,7 @@ export class OtpService {
 
     const { iv, encrypted } = encryptAES(secret);
 
-    const {
-      deviceId,
-      password,
-      signature: dtoSignature,
-      date,
-      ...restData
-    } = dto;
+    const { signature: dtoSignature, ...restData } = dto;
 
     const document = await this.firebaseService.createDocument(collection, {
       request: {
@@ -94,6 +88,8 @@ export class OtpService {
     collection: CollectionType
   ): Promise<OtpVerifyResponseDto> {
     const document = await this.firebaseService.getDocument(collection, dto.id);
+
+    await this.validateData(document, dto);
 
     if (document?.validate?.otpUsed) {
       throw new BadRequestException('OTP has already been used.');
@@ -152,5 +148,24 @@ export class OtpService {
     });
 
     return response;
+  }
+
+  private async validateData(document: any, dto: OtpVerifyDto) {
+    const { mobileNumber, deviceId, serviceType, timeLimit, otpType } =
+      document.request;
+
+    if (
+      mobileNumber !== dto.mobileNumber ||
+      deviceId !== dto.deviceId ||
+      serviceType !== dto.serviceType ||
+      timeLimit !== dto.timeLimit ||
+      otpType !== dto.otpType
+    ) {
+      throw new BadRequestException(
+        'OTP verification failed: Request parameters do not match'
+      );
+    }
+
+    return;
   }
 }

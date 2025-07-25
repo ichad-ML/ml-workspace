@@ -1,4 +1,4 @@
-import { OTPCollection } from '@ml-workspace/common';
+import { CollectionType } from '@ml-workspace/common';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
@@ -24,12 +24,12 @@ export class FirebaseService implements OnModuleInit {
     return this.db;
   }
 
-  async createDocument(app: OTPCollection, data: any) {
+  async createDocument(app: CollectionType, data: any) {
     return this.db.collection(app).add(data);
   }
 
   async getDocument<T = FirebaseFirestore.DocumentData>(
-    collection: OTPCollection,
+    collection: CollectionType,
     docId: string
   ): Promise<T & { id: string }> {
     const docRef = this.db.collection(collection).doc(docId);
@@ -45,7 +45,7 @@ export class FirebaseService implements OnModuleInit {
   }
 
   async updateDocument<T = FirebaseFirestore.DocumentData>(
-    collection: OTPCollection,
+    collection: CollectionType,
     docId: string,
     data: Partial<T>
   ): Promise<void> {
