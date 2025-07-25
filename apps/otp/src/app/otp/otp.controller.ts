@@ -16,14 +16,12 @@ export class OtpController {
   constructor(private readonly otpService: OtpService) {}
 
   @Post('/')
-  async requestInAppOtp(
-    @Body() requestDto: OtpRequestDto
-  ): Promise<OtpResponseDto> {
+  async requestOtp(@Body() requestDto: OtpRequestDto): Promise<OtpResponseDto> {
     const collection = isSmsOTP(requestDto.otpType)
       ? CollectionType.SMS_OTP
       : CollectionType.IN_APP_OTP;
 
-    return this.otpService.requestInAppOtp(requestDto, collection);
+    return this.otpService.requestOtp(requestDto, collection);
   }
 
   @Post('/verify')

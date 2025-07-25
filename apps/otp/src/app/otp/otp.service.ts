@@ -32,7 +32,7 @@ export class OtpService {
     private readonly logger: CustomLoggerService
   ) {}
 
-  async requestInAppOtp(
+  async requestOtp(
     dto: OtpRequestDto,
     collection: CollectionType
   ): Promise<OtpResponseDto> {
