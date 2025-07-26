@@ -1,10 +1,14 @@
 import { CollectionType } from '@ml-workspace/common';
+import { otpConfig } from '@ml-workspace/config';
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import type { ConfigType } from '@nestjs/config';
 import * as admin from 'firebase-admin';
 
 @Injectable()
 export class FirebaseService implements OnModuleInit {
   private db: FirebaseFirestore.Firestore;
+
+  constructor(private readonly config: ConfigType<typeof otpConfig>) {}
 
   onModuleInit() {
     if (!admin.apps.length) {

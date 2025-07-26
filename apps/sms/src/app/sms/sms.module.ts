@@ -5,7 +5,6 @@ import { MlClientApi } from "@ml-workspace/auth-lib";
 import { ConfigModule } from "@nestjs/config";
 import { smsConfig } from "@ml-workspace/config";
 import { SmsApiService } from '../services/sms-api.service';
-import { FirebaseService } from '../services/firebase.service';
 import { TokenService } from '../services/token.service';
 import { CustomLoggerService } from '@ml-workspace/common';
 
@@ -20,7 +19,6 @@ import { CustomLoggerService } from '@ml-workspace/common';
     SmsService,
     MlClientApi,
     SmsApiService,
-    FirebaseService,
     TokenService,
     CustomLoggerService,
   ],
