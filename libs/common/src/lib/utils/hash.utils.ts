@@ -8,15 +8,18 @@ export function createInAppSignature(
   salt: string
 ): string {
   const {
-    username,
-    password,
+    // username,
+    // password,
     mobileNumber,
     deviceId,
-    date,
+    // date,
     serviceType,
     timeLimit,
   } = dto;
 
+  const username = 'username' in dto ? dto.username?.trim() : '';
+  const password = 'password' in dto ? dto.password?.trim() : '';
+  const date = 'date' in dto ? dto.date?.trim() : '';
   const otpType = 'otpType' in dto ? dto.otpType?.trim() : '';
 
   const DELIMITER = '|';

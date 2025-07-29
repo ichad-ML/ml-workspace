@@ -53,13 +53,13 @@ export class InAppOtpDtoGetDetails {
 }
 
 export class OtpRequestDto {
-  @IsString()
-  @IsNotEmpty()
-  username: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // username: string;
 
-  @IsString()
-  @IsNotEmpty()
-  password: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // password: string;
 
   @IsString()
   @IsNotEmpty()
@@ -67,10 +67,6 @@ export class OtpRequestDto {
     message: 'mobileNumber must be 11 digits',
   })
   mobileNumber: string;
-
-  @IsNotEmpty()
-  @IsString()
-  date: string;
 
   @IsNotEmpty()
   @IsString()
@@ -125,11 +121,6 @@ export class OtpVerifyDto {
   @IsNotEmpty()
   deviceId: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  @Transform(({ value }) => Number(value))
-  timeLimit: number;
-
   @IsString()
   @IsNotEmpty()
   @Length(11, 11, {
@@ -141,13 +132,18 @@ export class OtpVerifyDto {
   @IsNotEmpty()
   pin: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  timeLimit: number;
+
   @IsNotEmpty()
   @IsEnum(TransactionType)
   serviceType: TransactionType;
 
-  @IsString()
-  @IsNotEmpty()
-  token: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // token: string;
 
   @IsString()
   @IsNotEmpty()
