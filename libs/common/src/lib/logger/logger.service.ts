@@ -1,4 +1,3 @@
-// libs/common/logger/src/lib/logger.service.ts
 import { Injectable, LoggerService } from '@nestjs/common';
 import { winstonLogger } from './winston.logger';
 
