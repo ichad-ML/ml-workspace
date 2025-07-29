@@ -5,6 +5,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class SmsApiService {
+
     constructor(
     private readonly mlClientApi: MlClientApi
     ) {}
