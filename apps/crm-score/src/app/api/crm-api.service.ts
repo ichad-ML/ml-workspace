@@ -16,6 +16,7 @@ export class CrmApiService {
             url: '/users',
             baseURL: this.config.crmTestBaseUrl
         });
+        console.log("logging response=>",response.data)
         
         return response.data
     }
