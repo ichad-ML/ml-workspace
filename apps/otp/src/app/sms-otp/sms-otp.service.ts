@@ -6,7 +6,7 @@ import {
   getCurrentDate,
   MESSAGE,
   MessageType,
-  OTPCollection,
+  CollectionType,
   SmsOtpRequestDto,
 } from '@ml-workspace/common';
 import { otpConfig } from '@ml-workspace/config';
@@ -46,7 +46,7 @@ export class SmsOtpService {
     const { password, message: dtoMessage, ...restData } = dto;
 
     const document = await this.firebaseService.createDocument(
-      OTPCollection.SMS_OTP,
+      CollectionType.SMS_OTP,
       {
         request: {
           iv,
@@ -71,7 +71,7 @@ export class SmsOtpService {
 
   async verifySmsOtp(dto: any) {
     const document = await this.firebaseService.getDocument(
-      OTPCollection.SMS_OTP,
+      CollectionType.SMS_OTP,
       dto.id
     );
 
@@ -88,7 +88,7 @@ export class SmsOtpService {
 
     const currentTime = getCurrentDate(DateFormat.YMD_Hms);
 
-    await this.firebaseService.updateDocument(OTPCollection.SMS_OTP, dto.id, {
+    await this.firebaseService.updateDocument(CollectionType.SMS_OTP, dto.id, {
       validate: {
         isValid,
         message,

@@ -11,6 +11,10 @@ export const mockOtpApiService: Functions<OtpApiService> = {
   async validateDevice<T>(): Promise<T> {
     return {} as T;
   },
+
+  async sendSmsOTP<T>(): Promise<T> {
+    return {} as T;
+  },
 };
 
 export const mockFirebaseService: Functions<FirebaseService> = {
@@ -22,6 +26,24 @@ export const mockFirebaseService: Functions<FirebaseService> = {
   },
   async updateDocument<T>(): Promise<T> {
     return {} as T;
+  },
+};
+
+export const mockLoggerService = {
+  log: (..._args: any[]) => {
+    // mock
+  },
+  error: (..._args: any[]) => {
+    // mock
+  },
+  warn: (..._args: any[]) => {
+    // mock
+  },
+  debug: (..._args: any[]) => {
+    // mock
+  },
+  verbose: (..._args: any[]) => {
+    // mock
   },
 };
 
